@@ -1,0 +1,50 @@
+/* ---------------------------------------
+	Tiny engine
+--------------------------------------- */
+
+	html, body, p, a
+	{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+		background: transparent;
+	}
+	
+	body
+	{
+		margin: 1.25em;
+		font-family: Helvetica, Arial, sans-serif;
+	}
+	
+	p
+	{
+		display: block;
+	}
+	
+	p + p
+	{
+		margin-top: 0.5em;
+	}
+	
+	a
+	{
+		color: #00C9FF;
+		text-decoration: none;
+	}
+	
+	a:hover,
+	a:focus
+	{
+		text-decoration: underline;
+	}
+	
+	.address
+	{
+		margin-bottom: 1em;
+	}
+	
+	.address p + p
+	{
+		margin-top: 0;
+	}

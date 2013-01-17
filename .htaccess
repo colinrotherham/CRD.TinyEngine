@@ -1,0 +1,7 @@
+AddDefaultCharset UTF-8
+DefaultLanguage en-GB
+RewriteEngine on
+
+# Set up pages
+RewriteRule ^$				/views/view-home.php [QSA,L]
+RewriteRule ^contact/$		/views/view-contact.php [QSA,L]
