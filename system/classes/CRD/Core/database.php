@@ -14,17 +14,15 @@
 		
 		public function query($query, $multiple = false)
 		{
-			global $config;
-		
 			if (is_object($this->connection))
 			{
 				$this->result = ($multiple)? $this->connection->multi_query($query) : $this->connection->query($query);
 				
-				if (!$this->result && $config->debug)
+				if (!$this->result && App::debug)
 					echo $this->connection->error;
 			}
 			
-			else if ($config->debug)
+			else if (App::debug)
 			{
 				echo "\nFailed to connect\n\n";
 			}

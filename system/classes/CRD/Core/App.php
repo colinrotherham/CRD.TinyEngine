@@ -21,6 +21,8 @@
 		public static $credentials;
 		public static $queries;
 		
+		public static $debug = false;
+		
 		public static function init()
 		{
 			self::$credentials = (object) array();
