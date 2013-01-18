@@ -15,16 +15,17 @@
 
 	// Start auto-loader
 	$loader = new SplClassLoader();
-    $loader->register();
+	$loader->register();
 
 	// Include resources
 	foreach (glob($path . '/resources/*.php') as $resource_filename)
 		require_once ($resource_filename);
 
+	// Save root path into app config
+	App::$path = $path;
+	App::init();
+
 	// Include other configs
 	require_once ($path . '/system/config/config.php');
 	require_once ($path . '/system/config/queries.php');
-	
-    // Save root path into app config
-    App::$path = $path;
 ?>
