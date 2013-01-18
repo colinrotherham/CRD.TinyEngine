@@ -17,4 +17,6 @@
 		
 		public static $cache_enabled = true;
 		public static $cache_length = 3600;
+		
+		public static $queries;
 	}
