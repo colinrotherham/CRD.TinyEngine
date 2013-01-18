@@ -23,6 +23,7 @@
 
 	// Include other configs
 	require_once ($path . '/system/config/config.php');
+	require_once ($path . '/system/config/queries.php');
 	
     // Save root path into app config
     App::$path = $path;
