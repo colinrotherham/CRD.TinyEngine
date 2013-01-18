@@ -45,12 +45,12 @@
 			if (!empty($credentials_alternative)) $credentials = $credentials_alternative;
 		
 			// Bring up a database connection
-			if (empty($this->connection)) $this->connection = new mysqli
+			if (empty($this->connection)) $this->connection = new \mysqli
 			(
-				$credentials->host,
-				$credentials->username,
-				$credentials->password,
-				$credentials->database
+				\CRD\Core\App::$credentials->host,
+				\CRD\Core\App::$credentials->username,
+				\CRD\Core\App::$credentials->password,
+				\CRD\Core\App::$credentials->database
 			);
 			
 			// Any errors?
