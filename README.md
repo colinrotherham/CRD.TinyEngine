@@ -13,13 +13,13 @@ Configuring the engine
 
 It's over to you really, stick it into a new Apache site and see how it runs.
 
-1. Page templates and partials are defined here:
+* Page templates and partials are defined here:
 
 ```
 	/system/config/config.php
 ```
 
-2. Templates, views and partials are stored as follows:
+* Templates, views and partials are stored as follows:
 
 ```
 	/templates/template-page.php
@@ -28,14 +28,14 @@ It's over to you really, stick it into a new Apache site and see how it runs.
     /views/partials/partial-address.php
 ```
 
-3. Resources for different locales are stored as follows:
+* Resources for different locales are stored as follows:
 
 ```
 	/resources/en-GB.php
 	/resources/en-US.php
 ```
 
-4. Finally, to map a route's URL to a view simply add it the old-fashioned way:
+* Finally, to map a route's URL to a view simply add it the old-fashioned way:
 
 ```
 	.htaccess
