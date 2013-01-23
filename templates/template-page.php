@@ -13,7 +13,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<!-- CSS includes -->
-		<link rel="stylesheet" href="/assets/css/engine.css">
+		<link rel="stylesheet" href="/assets/css/engine.css?cache=<?= urlencode(App::$version) ?>">
 		
 		<!-- Initialise advanced UI -->
 		<script>document.documentElement.className = 'advanced';</script>
