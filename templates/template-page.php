@@ -5,7 +5,7 @@
 	use \CRD\Core\HTML as HTML;
 
 ?><!doctype html>
-<html lang="<?php echo Resource::$locale; ?>">
+<html lang="<?= HTML::entities(Resource::$locale) ?>">
 	<head>
 		<meta charset="utf-8">
 		<title><?= HTML::entities(((!empty(Template::$title))? Template::$title . ' — ' : '') . App::$name) ?></title>
