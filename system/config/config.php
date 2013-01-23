@@ -12,6 +12,9 @@
 
 	// App name, also cache prefix
 	App::$name = 'Tiny Engine';
+	
+	// Set app version string
+	App::$version = '1.0';
 
 	// Page templates
 	App::$templates = array
