@@ -9,6 +9,8 @@
 
 	class App
 	{
+        public static $version = '';
+	
 		public static $name = '';
 		public static $path = '';
 		
