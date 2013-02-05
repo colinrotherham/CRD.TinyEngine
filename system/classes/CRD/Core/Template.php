@@ -26,8 +26,16 @@
 			self::$template = $template;
 			self::$name = $name;
 
-			// Render when finished
-			register_shutdown_function(array(__CLASS__, 'render'));
+			if (isset(App::$templates[self::$template]))
+			{
+				// Render when finished
+				register_shutdown_function(array(__CLASS__, 'render'));
+			}
+
+			else
+			{
+				error_log("Missing template: '$template'");
+			}
 		}
 		
 		public static function placeHolder($name, $content = null, $partial = null)
