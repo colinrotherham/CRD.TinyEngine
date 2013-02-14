@@ -7,51 +7,58 @@
 
 	namespace CRD\Core;
 
-	class Resource
+	class Resources
 	{
-		public static $locale = '';
-		public static $locale_default = 'en-GB';
-		
+		private $app;
+
+		public $locale = '';
+		public $locale_default = 'en-GB';
+
 		// All resources will be populated here
-		public static $resources = array();
-		
+		public $list = array();
+
 		// The current/default locale's resources will be populated here
-		public static $resource;
-		public static $resource_default;
-		
+		public $resource;
+		public $resource_default;
+
+		public function __construct($app)
+		{
+			$this->app = $app;
+		}
+
 		// Set locale
-		public static function locale($locale)
+		public function locale($locale)
 		{
 			// Use requested locale or fall back to default?
-			self::$locale = (array_key_exists($locale, self::$resources))?
-				$locale : self::$locale_default;
+			$this->locale = (array_key_exists($locale, $this->list))?
+				$locale : $this->locale_default;
 
 			// Try to set chosen resource
-			if (isset(self::$resources[self::$locale]))
-				self::$resource = self::$resources[self::$locale];
+			if (isset($this->list[$this->locale]))
+				$this->resource = $this->list[$this->locale];
 
 			// Try to set default resource
-			if (isset(self::$resources[self::$locale_default]))
-				self::$resource_default = self::$resources[self::$locale_default];
+			if (isset($this->list[$this->locale_default]))
+				$this->resource_default = $this->list[$this->locale_default];
 		}
 		
 		// Get text string by key
-		public static function get($category, $key)
+		public function get($category, $key)
 		{
 			// Presume default locale if not yet set
-			if (!isset(self::$resource))
+			if (!isset($this->resource))
 			{
-				self::locale(self::$locale_default);
-			}			
+				$this->locale($this->locale_default);
+			}
 		
 			// Grab the locale's resource and category strings
-			$resource = self::$resource;
+			$resource = $this->resource;
 			$strings = (array_key_exists($category, $resource))? $resource[$category] : array();
 			
 			// Store the final resource string here
 			$string = '';
 
-			// Does string exist for chosen locale?		
+			// Does string exist for chosen locale?
 			if (array_key_exists($key, $strings))
 			{
 				$string = $strings[$key];
@@ -61,7 +68,7 @@
 			else
 			{
 				// Grab the default locale's resource and category strings
-				$resource = self::$resource_default;
+				$resource = $this->resource_default;
 				$strings = (array_key_exists($category, $resource))? $resource[$category] : array();
 
 				// Does string exist for default locale?
@@ -77,9 +84,9 @@
 			return $string;
 		}
 		
-		public static function html($category, $key, $find_replaces = null)
+		public function html($category, $key, $find_replaces = null)
 		{
-			$resource = HTML::entities(self::get($category, $key));
+			$resource = HTML::entities($this->get($category, $key));
 
 			if ($find_replaces) foreach ($find_replaces as $find_replace)
 			{

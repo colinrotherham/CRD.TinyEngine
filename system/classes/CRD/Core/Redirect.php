@@ -9,7 +9,14 @@
 
 	class Redirect
 	{
-		public static function to($url, $permanent = false)
+		private $app;
+
+		public function __construct($app)
+		{
+			$this->app = $app;
+		}
+
+		public function to($url, $permanent = false)
 		{
 			if ($permanent)
 			{

@@ -5,7 +5,7 @@
 	https://github.com/colinrotherham
 */
 
-	use \CRD\Core\App as App;
+	namespace CRD\Core;
 
 	// Where are we?
 	$path = realpath(getcwd() . '/../');
@@ -14,16 +14,15 @@
 	require_once ($path . '/system/classes/SplClassLoader.php');
 
 	// Start auto-loader
-	$loader = new SplClassLoader();
+	$loader = new \SplClassLoader();
 	$loader->register();
+
+	// Save root path into app config
+	$app = new App($path);
 
 	// Include resources
 	foreach (glob($path . '/resources/*.php') as $resource_filename)
 		require_once ($resource_filename);
-
-	// Save root path into app config
-	App::$path = $path;
-	App::init();
 
 	// Include other configs
 	require_once ($path . '/system/config/config.php');

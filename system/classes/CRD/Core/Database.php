@@ -9,9 +9,16 @@
 
 	class Database
 	{
-		public $connection;
+		private $app;
 		private $result = false;
-		
+
+		public $connection;
+
+		public function __construct($app)
+		{
+			$this->app = $app;
+		}
+
 		public function query($query, $multiple = false)
 		{
 			if (is_object($this->connection))

@@ -9,25 +9,41 @@
 
 	class App
 	{
-        public static $version = '';
-	
-		public static $name = '';
-		public static $path = '';
-		
-		public static $templates = array();
-		public static $partials = array();
-		
-		public static $cache_enabled = true;
-		public static $cache_length = 3600;
-		
-		public static $credentials;
-		public static $queries;
-		
-		public static $debug = false;
-		
-		public static function init()
+		// Other helpers
+		public $cache;
+		public $database;
+		public $html;
+		public $redirect;
+		public $resource;
+		public $template;
+
+		public $path = '';
+		public $version = '';
+		public $name = '';
+		public $templates = array();
+		public $partials = array();
+
+		public $cache_enabled = true;
+		public $cache_length = 3600;
+
+		public $credentials;
+		public $queries;
+
+		public $debug = false;
+
+		public function __construct($path = '')
 		{
-			self::$credentials = (object) array();
-			self::$queries = (object) array();
+			$this->credentials = (object) array();
+			$this->queries = (object) array();
+
+			// Set path
+			$this->path = $path;
+
+			// Instantiate other helpers + inject app instance
+			$this->cache = new Cache($this);
+			$this->database = new Database($this);
+			$this->html = new HTML($this);
+			$this->redirect = new Redirect($this);
+			$this->resources = new Resources($this);
 		}
 	}

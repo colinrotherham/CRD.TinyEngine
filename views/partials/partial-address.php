@@ -1,11 +1,14 @@
 <?php
-	use \CRD\Core\Resource as Resource;
+	namespace CRD\Core;
 
-	$address_1 = Resource::get('Contact Us', 'Address Line 1');
-	$address_2 = Resource::get('Contact Us', 'Address Line 2');
-	$town = Resource::get('Contact Us', 'Town');
-	$county = Resource::get('Contact Us', 'County');
-	$postcode = Resource::get('Contact Us', 'Postcode');
+	$resources = $this->app->resources;
+
+	// Resource example
+	$address_1 = $resources->get('Contact Us', 'Address Line 1');
+	$address_2 = $resources->get('Contact Us', 'Address Line 2');
+	$town = $resources->get('Contact Us', 'Town');
+	$county = $resources->get('Contact Us', 'County');
+	$postcode = $resources->get('Contact Us', 'Postcode');
 ?>
 			<div class="address">
 <?php

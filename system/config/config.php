@@ -4,30 +4,29 @@
 	Application config
 	----------------------------------- */
 
-	use \CRD\Core\App as App;
-	use \CRD\Core\Resource as Resource;
+	namespace CRD\Core;
 
 	// Default timezone
 	date_default_timezone_set('Europe/London');
 
 	// App name, also cache prefix
-	App::$name = 'Tiny Engine';
+	$app->name = 'Tiny Engine';
 	
 	// Set app version string
-	App::$version = '1.0';
+	$app->version = '1.0';
 
 	// Page templates
-	App::$templates = array
+	$app->templates = array
 	(
 		'page'		=> '/templates/template-page.php'
 	);
 	
 	// Page partials
-	App::$partials = array
+	$app->partials = array
 	(
 		'address'	=> '/views/partials/partial-address.php'
 	);
 
 	// Set up locale
-	Resource::locale('en-GB');
+	$app->resources->locale('en-GB');
 ?>

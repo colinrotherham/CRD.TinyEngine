@@ -8,8 +8,15 @@
 	namespace CRD\Core;
 
 	class HTML
-	{		
-		public static function entities($value)
+	{
+		private $app;
+
+		public function __construct($app)
+		{
+			$this->app = $app;
+		}
+
+		public function entities($value)
 		{
 			return htmlentities($value, ENT_QUOTES, 'UTF-8');
 		}

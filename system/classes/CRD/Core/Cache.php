@@ -9,7 +9,14 @@
 
 	class Cache
 	{
-		public static function get($cache_name)
+		private $app;
+
+		public function __construct($app)
+		{
+			$this->app = $app;
+		}
+	
+		public function get($cache_name)
 		{
 			$success = false;
 			$cache_value = null;
@@ -23,7 +30,7 @@
 			return false;
 		}
 
-		public static function set($cache_name, $cache_value)
+		public function set($cache_name, $cache_value)
 		{
 			if (function_exists('apc_store') && App::$cache_enabled)
 			{
@@ -33,7 +40,7 @@
 			return false;
 		}
 		
-		public static function delete($cache_name)
+		public function delete($cache_name)
 		{
 			if (function_exists('apc_delete') && App::$cache_enabled)
 			{
@@ -43,7 +50,7 @@
 			return false;
 		}
 		
-		public static function clear()
+		public function clear()
 		{
 			apc_clear_cache('user');
 		}

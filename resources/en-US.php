@@ -1,11 +1,13 @@
 <?php
-	use \CRD\Core\Resource as Resource;
+	namespace CRD\Core;
+
+	$resources = &$app->resources->list;
 
 	// Start new resource
-	Resource::$resources['en-US'] = array();
+	$resources['en-US'] = array();
 	
 	// Home page resources
-	Resource::$resources['en-US']['Home'] = array
+	$resources['en-US']['Home'] = array
 	(
 		'Intro'			=> 'Hey guys, check out the tiny engine demo'
 	);

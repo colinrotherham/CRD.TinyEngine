@@ -9,45 +9,50 @@
 
 	class Template
 	{
-		public static $name = '';
-		public static $title = '';
-		public static $meta = '';
-		public static $canonical = '';
+		public $app;
+	
+		public $name = '';
+		public $title = '';
+		public $meta = '';
+		public $canonical = '';
 
 		// Template and current placeholder
-		private static $template = '';
-		private static $placeholder = '';
+		private $template = '';
+		private $placeholder = '';
 		
 		// Array of content by placeholder name
-		private static $buffer = array();
+		private $buffer = array();
 
-		public static function create($template, $name = '')
+		public function __construct($app, $template, $name = '')
 		{
-			self::$template = $template;
-			self::$name = $name;
-
-			if (isset(App::$templates[self::$template]))
+			$this->app = $app;
+			$this->template = $template;
+			$this->name = $name;
+		}
+		
+		public function __destruct()
+		{
+			if (isset($this->app->templates[$this->template]))
 			{
-				// Render when finished
-				register_shutdown_function(array(__CLASS__, 'render'));
+				$this->render();
 			}
-
+			
 			else
 			{
 				error_log("Missing template: '$template'");
 			}
 		}
 		
-		public static function placeHolder($name, $content = null, $partial = null)
+		public function placeHolder($name, $content = null, $partial = null)
 		{
-			self::$placeholder = $name;
-			self::$buffer[self::$placeholder] = '';
+			$this->placeholder = $name;
+			$this->buffer[$this->placeholder] = '';
 
 			// Auto-assign content
 			if (!empty($content))
 			{
-				self::$buffer[self::$placeholder] = $content;
-				self::placeHolderEnd();
+				$this->buffer[$this->placeholder] = $content;
+				$this->placeHolderEnd();
 				return;
 			}
 
@@ -57,59 +62,62 @@
 			if (!empty($partial))
 			{
 				// Insert partial content into buffer
-				require_once (App::$path . '/' . App::$partials[$partial]);
+				require_once ($this->app->path . '/' . $this->app->partials[$partial]);
 				
 				// End placeholder, i.e. close buffer
-				self::placeHolderEnd();
+				$this->placeHolderEnd();
 			}
 		}
 		
-		public static function placeHolderEnd()
+		public function placeHolderEnd()
 		{
 			// Spit the buffer into $content
-			if (empty(self::$buffer[self::$placeholder]))
+			if (empty($this->buffer[$this->placeholder]))
 			{
-				self::$buffer[self::$placeholder] = ob_get_contents();
-				self::$placeholder = '';
+				$this->buffer[$this->placeholder] = ob_get_contents();
+				$this->placeholder = '';
 
 				// Clear down the buffer
 				ob_end_clean();
 			}
 		}
 		
-		public static function placeHolderPartial($name, $partial)
+		public function placeHolderPartial($name, $partial)
 		{
-			self::placeHolder($name, null, $partial);
+			$this->placeHolder($name, null, $partial);
 		}
 		
-		public static function contentPartial($partial, $shared = null)
+		public function contentPartial($partial, $shared = null)
 		{
 			// Inject content
-			require_once (App::$path . '/' . App::$partials[$partial]);
+			require_once ($this->app->path . '/' . $this->app->partials[$partial]);
 		}
 		
-		public static function content($name, $return = false)
+		public function content($name, $return = false)
 		{
-			$content = (!empty(self::$buffer[$name]))? self::$buffer[$name]: '';
+			$content = (!empty($this->buffer[$name]))? $this->buffer[$name]: '';
 			
 			if (!$return) echo $content;
 			else return $content;
 		}
-		
-		public static function render()
+
+		public function render()
 		{
-			if (!empty(self::$placeholder)) self::placeHolderEnd();			
-			
+			if (!empty($this->placeholder))
+			{
+				$this->placeHolderEnd();
+			}
+
 			// Pull template from cache, save disk IO
-			$template_content = Cache::get('template-' . self::$template);
+			$template_content = Cache::get('template-' . $this->template);
 
 			// Include file if not cached
 			if (!$template_content)
 			{
-				$template_file = App::$path . '/' . App::$templates[self::$template];
+				$template_file = $this->app->path . '/' . $this->app->templates[$this->template];
 
 				// Attempt to cache
-				Cache::set('template-' . self::$template, file_get_contents($template_file));
+				Cache::set('template-' . $this->template, file_get_contents($template_file));
 			
 				// Load the template
 				require_once ($template_file);
