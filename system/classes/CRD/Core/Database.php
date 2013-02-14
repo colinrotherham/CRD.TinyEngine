@@ -25,11 +25,11 @@
 			{
 				$this->result = ($multiple)? $this->connection->multi_query($query) : $this->connection->query($query);
 				
-				if (!$this->result && App::debug)
+				if (!$this->result && $this->app->debug)
 					echo $this->connection->error;
 			}
 			
-			else if (App::debug)
+			else if ($this->app->debug)
 			{
 				echo "\nFailed to connect\n\n";
 			}
@@ -54,10 +54,10 @@
 			// Bring up a database connection
 			if (empty($this->connection)) $this->connection = new \mysqli
 			(
-				\CRD\Core\App::$credentials->host,
-				\CRD\Core\App::$credentials->username,
-				\CRD\Core\App::$credentials->password,
-				\CRD\Core\App::$credentials->database
+				$this->app->credentials->host,
+				$this->app->credentials->username,
+				$this->app->credentials->password,
+				$this->app->credentials->database
 			);
 			
 			// Any errors?

@@ -86,7 +86,7 @@
 		
 		public function html($category, $key, $find_replaces = null)
 		{
-			$resource = HTML::entities($this->get($category, $key));
+			$resource = $this->app->html->entities($this->get($category, $key));
 
 			if ($find_replaces) foreach ($find_replaces as $find_replace)
 			{

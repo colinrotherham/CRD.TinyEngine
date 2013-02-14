@@ -109,7 +109,7 @@
 			}
 
 			// Pull template from cache, save disk IO
-			$template_content = Cache::get('template-' . $this->template);
+			$template_content = $this->app->cache->get('template-' . $this->template);
 
 			// Include file if not cached
 			if (!$template_content)
@@ -117,7 +117,7 @@
 				$template_file = $this->app->path . '/' . $this->app->templates[$this->template];
 
 				// Attempt to cache
-				Cache::set('template-' . $this->template, file_get_contents($template_file));
+				$this->app->cache->set('template-' . $this->template, file_get_contents($template_file));
 			
 				// Load the template
 				require_once ($template_file);
