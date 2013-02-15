@@ -24,9 +24,6 @@
 		public function __construct($app)
 		{
 			$this->app = $app;
-
-			// Assume default locale
-			$this->setLocale();
 		}
 
 		// Set locale

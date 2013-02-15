@@ -24,4 +24,7 @@
 	// Include resources
 	foreach (glob($path . '/resources/*.php') as $resource_filename)
 		require_once ($resource_filename);
+
+	// Assume default locale for now (may be overridden later)
+	$app->resources->setLocale();
 ?>
