@@ -27,8 +27,10 @@
 		}
 
 		// Set locale
-		public function locale($locale)
+		public function locale()
 		{
+			$locale = $this->app->locale;
+		
 			// Use requested locale or fall back to default?
 			$this->locale = (array_key_exists($locale, $this->list))?
 				$locale : $this->locale_default;

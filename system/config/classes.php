@@ -17,14 +17,11 @@
 	$loader = new \SplClassLoader();
 	$loader->register();
 
-	// Save root path into app config
-	$app = new App($path);
+	// Include other configs
+	require_once ($path . '/system/config/config.php');
+	require_once ($path . '/system/config/queries.php');
 
 	// Include resources
 	foreach (glob($path . '/resources/*.php') as $resource_filename)
 		require_once ($resource_filename);
-
-	// Include other configs
-	require_once ($path . '/system/config/config.php');
-	require_once ($path . '/system/config/queries.php');
 ?>
