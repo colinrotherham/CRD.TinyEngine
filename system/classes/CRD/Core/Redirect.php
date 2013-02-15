@@ -23,7 +23,7 @@
 				header('HTTP/1.1 301 Moved Permanently');
 			}
 		
-			// Perform redirect to login page
+			// Perform redirect
 			header('Location: ' . $url); exit;
 		}
 	}
