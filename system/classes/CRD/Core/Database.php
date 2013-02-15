@@ -45,12 +45,8 @@
 			}
 		}
 		
-		public function connect($credentials_alternative = null)
+		public function connect()
 		{
-			global $credentials;
-			
-			if (!empty($credentials_alternative)) $credentials = $credentials_alternative;
-		
 			// Bring up a database connection
 			if (empty($this->connection)) $this->connection = new \mysqli
 			(
