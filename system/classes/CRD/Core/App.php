@@ -20,7 +20,6 @@
 		public $path = '';
 		public $version = '';
 		public $name = '';
-		public $locale = '';
 		public $templates = array();
 		public $partials = array();
 

@@ -29,7 +29,4 @@
 	(
 		'address'	=> '/views/partials/partial-address.php'
 	);
-
-	// Set up locale
-	$app->locale = 'en-GB';
 ?>

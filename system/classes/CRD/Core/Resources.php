@@ -18,19 +18,20 @@
 		public $list = array();
 
 		// The current/default locale's resources will be populated here
-		public $resource;
-		public $resource_default;
+		public $resource = array();
+		public $resource_default = array();
 
 		public function __construct($app)
 		{
 			$this->app = $app;
+
+			// Assume default locale
+			$this->setLocale();
 		}
 
 		// Set locale
-		public function locale()
+		public function setLocale($locale = '')
 		{
-			$locale = $this->app->locale;
-		
 			// Use requested locale or fall back to default?
 			$this->locale = (array_key_exists($locale, $this->list))?
 				$locale : $this->locale_default;
@@ -50,7 +51,7 @@
 			// Presume default locale if not yet set
 			if (!isset($this->resource))
 			{
-				$this->locale($this->locale_default);
+				$this->setLocale($this->locale_default);
 			}
 		
 			// Grab the locale's resource and category strings

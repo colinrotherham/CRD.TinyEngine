@@ -28,9 +28,6 @@
 			$this->app = $app;
 			$this->template = $template;
 			$this->name = $name;
-			
-			// Push app locale to Resources
-			$this->app->resources->locale();
 		}
 		
 		public function __destruct()
