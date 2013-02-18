@@ -16,7 +16,7 @@ It's over to you really, stick it into a new Apache site and see how it runs.
 * Page templates and partials are defined here:
 
 ```
-	/system/config/config.php
+	/config.php
 ```
 
 * Templates, views and partials are stored as follows:

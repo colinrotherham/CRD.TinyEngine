@@ -11,15 +11,14 @@
 	$path = realpath(getcwd() . '/../');
 
 	// Include class auto-loader
-	require_once ($path . '/system/classes/SplClassLoader.php');
+	require_once ($path . '/engine/classes/SplClassLoader.php');
 
 	// Start auto-loader
 	$loader = new \SplClassLoader();
 	$loader->register();
 
-	// Include other configs
-	require_once ($path . '/system/config/config.php');
-	require_once ($path . '/system/config/queries.php');
+	// Include main config
+	require_once ($path . '/config.php');
 
 	// Include resources
 	foreach (glob($path . '/resources/*.php') as $resource_filename)

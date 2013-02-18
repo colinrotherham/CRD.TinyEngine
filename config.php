@@ -29,4 +29,7 @@
 	(
 		'address'	=> '/views/partials/partial-address.php'
 	);
+
+	// Add queries config
+	require_once ($path . '/config.queries.php');
 ?>
