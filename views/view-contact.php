@@ -1,21 +1,16 @@
 <?php
-	namespace CRD\Core;
-
-	require_once ('../engine/start.php');
-
-	$template = new Template($app, 'page', 'page-contact');
-	$resources = $app->resources;
+	$resources = $this->template->resources;
 
 	// Start placeholder
-	$template->placeHolder('main');
+	$this->template->placeHolder('main');
 ?>
 			<h1><?= $resources->html('Contact Us', 'Heading') ?></h1>
 <?php
 	// Inject address partial
-	$template->contentPartial('address');
+	$this->template->contentPartial('address');
 ?>
 			<p><?= $resources->html('Shared', 'Go to') ?> <a href="/"><?= $resources->html('Home', 'Heading') ?></a></p>
 <?php
 	// End placeholder
-	$template->placeHolderEnd();
+	$this->template->placeHolderEnd();
 ?>

@@ -1,7 +1,8 @@
 AddDefaultCharset UTF-8
 DefaultLanguage en-GB
 RewriteEngine on
+RewriteBase /
 
-# Set up pages
-RewriteRule ^$				/views/view-home.php [QSA,L]
-RewriteRule ^contact/$		/views/view-contact.php [QSA,L]
+# Pass all requests to router
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ /engine/start.php/$1 [L]

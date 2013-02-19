@@ -9,7 +9,7 @@
 
 	class Resources
 	{
-		private $app;
+		private $template;
 
 		public $locale = '';
 		public $locale_default = 'en-GB';
@@ -21,9 +21,18 @@
 		public $resource = array();
 		public $resource_default = array();
 
-		public function __construct($app)
+		public function __construct($template)
 		{
-			$this->app = $app;
+			global $path;
+		
+			$this->template = $template;
+
+			// Include resources
+			foreach (glob($path . '/resources/*.php') as $resource_filename)
+				require_once ($resource_filename);
+
+			// Assume default locale for now (may be overridden later)
+			$this->setLocale();
 		}
 
 		// Set locale
@@ -78,7 +87,7 @@
 				}
 				
 				// Oh dear, can't find this one
-				else error_log("Missing '{$key}' resource");
+				else throw new \Exception("Missing '{$key}' resource");
 			}
 
 			return $string;
@@ -86,7 +95,7 @@
 		
 		public function html($category, $key, $find_replaces = null)
 		{
-			$resource = $this->app->html->entities($this->get($category, $key));
+			$resource = $this->template->html->entities($this->get($category, $key));
 
 			if ($find_replaces) foreach ($find_replaces as $find_replace)
 			{

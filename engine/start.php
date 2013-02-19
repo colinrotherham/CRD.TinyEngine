@@ -17,13 +17,7 @@
 	$loader = new \SplClassLoader();
 	$loader->register();
 
-	// Include main config
+	// Include main config + routes
 	require_once ($path . '/config.php');
-
-	// Include resources
-	foreach (glob($path . '/resources/*.php') as $resource_filename)
-		require_once ($resource_filename);
-
-	// Assume default locale for now (may be overridden later)
-	$app->resources->setLocale();
+	require_once ($path . '/config.routes.php');
 ?>

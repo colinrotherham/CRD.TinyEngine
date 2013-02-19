@@ -11,9 +11,9 @@
 	{
 		private $app;
 
-		public function __construct($app)
+		public function __construct($template)
 		{
-			$this->app = $app;
+			$this->template = $template;
 		}
 
 		public function entities($value)

@@ -10,7 +10,7 @@
 	date_default_timezone_set('Europe/London');
 
 	// Start the app
-	$app = new App($path);
+	$app = new App();
 
 	// App name, also cache prefix
 	$app->name = 'Tiny Engine';

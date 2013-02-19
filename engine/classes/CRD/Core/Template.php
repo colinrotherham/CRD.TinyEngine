@@ -9,7 +9,7 @@
 
 	class Template
 	{
-		public $app;
+		public $view;
 	
 		public $name = '';
 		public $title = '';
@@ -23,28 +23,33 @@
 		// Array of content by placeholder name
 		private $buffer = array();
 
-		public function __construct($app, $template, $name = '')
+		// Other helpers
+		public $html;
+		public $resources;
+
+		public function __construct($view, $template, $name = '')
 		{
-			$this->app = $app;
+			$this->view = $view;
 			$this->template = $template;
 			$this->name = $name;
+
+			// Other helpers
+			$this->html = new HTML($this);
+			$this->resources = new Resources($this);
 		}
 		
 		public function __destruct()
 		{
-			if (isset($this->app->templates[$this->template]))
-			{
+			if (isset($this->view->templates[$this->template]))
 				$this->render();
-			}
-			
-			else
-			{
-				error_log("Missing template: '$template'");
-			}
+
+			else throw new \Exception("Missing template: '{$this->template}'");
 		}
 		
 		public function placeHolder($name, $content = null, $partial = null)
 		{
+			global $path;
+		
 			$this->placeholder = $name;
 			$this->buffer[$this->placeholder] = '';
 
@@ -62,7 +67,7 @@
 			if (!empty($partial))
 			{
 				// Insert partial content into buffer
-				require_once ($this->app->path . '/' . $this->app->partials[$partial]);
+				require_once ($path . '/' . $this->view->partials[$partial]);
 				
 				// End placeholder, i.e. close buffer
 				$this->placeHolderEnd();
@@ -89,8 +94,10 @@
 		
 		public function contentPartial($partial, $shared = null)
 		{
+			global $path;
+		
 			// Inject content
-			require_once ($this->app->path . '/' . $this->app->partials[$partial]);
+			require_once ($path . '/' . $this->view->partials[$partial]);
 		}
 		
 		public function content($name, $return = false)
@@ -103,21 +110,23 @@
 
 		public function render()
 		{
+			global $path;
+		
 			if (!empty($this->placeholder))
 			{
 				$this->placeHolderEnd();
 			}
 
 			// Pull template from cache, save disk IO
-			$template_content = $this->app->cache->get('template-' . $this->template);
+			$template_content = $this->view->cache->get('template-' . $this->template);
 
 			// Include file if not cached
 			if (!$template_content)
 			{
-				$template_file = $this->app->path . '/' . $this->app->templates[$this->template];
+				$template_file = $path . '/' . $this->view->templates[$this->template];
 
 				// Attempt to cache
-				$this->app->cache->set('template-' . $this->template, file_get_contents($template_file));
+				$this->view->cache->set('template-' . $this->template, file_get_contents($template_file));
 			
 				// Load the template
 				require_once ($template_file);

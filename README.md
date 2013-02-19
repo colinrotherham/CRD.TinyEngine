@@ -35,7 +35,8 @@ It's over to you really, stick it into a new Apache site and see how it runs.
 	/resources/en-US.php
 ```
 
-* Finally, to map a route's URL to a view simply add it the old-fashioned way:
+* Finally, to map a route's URL to a view simply add it the route config. Templates
+and view data for each route is bound here too.
 
 ```
 	.htaccess

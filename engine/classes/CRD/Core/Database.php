@@ -9,14 +9,14 @@
 
 	class Database
 	{
-		private $app;
+		private $credentials;
 		private $result = false;
 
 		public $connection;
 
-		public function __construct($app)
+		public function __construct($credentials)
 		{
-			$this->app = $app;
+			$this->credentials = $credentials;
 		}
 
 		public function query($query, $multiple = false)
@@ -24,15 +24,9 @@
 			if (is_object($this->connection))
 			{
 				$this->result = ($multiple)? $this->connection->multi_query($query) : $this->connection->query($query);
-				
-				if (!$this->result && $this->app->debug)
-					echo $this->connection->error;
 			}
 			
-			else if ($this->app->debug)
-			{
-				echo "\nFailed to connect\n\n";
-			}
+			else throw new \Exception('Failed to connect to database');
 			
 			return $this->result;
 		}
@@ -50,10 +44,10 @@
 			// Bring up a database connection
 			if (empty($this->connection)) $this->connection = new \mysqli
 			(
-				$this->app->credentials->host,
-				$this->app->credentials->username,
-				$this->app->credentials->password,
-				$this->app->credentials->database
+				$this->credentials->host,
+				$this->credentials->username,
+				$this->credentials->password,
+				$this->credentials->database
 			);
 			
 			// Any errors?

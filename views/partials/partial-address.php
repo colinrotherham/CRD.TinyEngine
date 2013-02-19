@@ -1,7 +1,7 @@
 <?php
 	namespace CRD\Core;
 
-	$resources = $this->app->resources;
+	$resources = $this->resources;
 
 	// Resource example
 	$address_1 = $resources->get('Contact Us', 'Address Line 1');

@@ -10,14 +10,11 @@
 	class App
 	{
 		// Other helpers
+		public $router;
 		public $cache;
 		public $database;
-		public $html;
 		public $redirect;
-		public $resource;
-		public $template;
 
-		public $path = '';
 		public $version = '';
 		public $name = '';
 		public $templates = array();
@@ -29,21 +26,14 @@
 		public $credentials;
 		public $queries;
 
-		public $debug = false;
-
-		public function __construct($path = '')
+		public function __construct()
 		{
 			$this->credentials = (object) array();
 			$this->queries = (object) array();
 
-			// Set path
-			$this->path = $path;
-
 			// Instantiate other helpers + inject app instance
-			$this->cache = new Cache($this);
-			$this->database = new Database($this);
-			$this->html = new HTML($this);
-			$this->redirect = new Redirect($this);
-			$this->resources = new Resources($this);
+			$this->cache = new Cache($this->name, $this->cache_enabled, $this->cache_length);
+			$this->database = new Database($this->credentials);
+			$this->redirect = new Redirect();
 		}
 	}

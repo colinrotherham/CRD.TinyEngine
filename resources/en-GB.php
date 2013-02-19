@@ -1,26 +1,24 @@
 <?php
 	namespace CRD\Core;
 
-	$resources = &$app->resources->list;
-
 	// Start new resource
-	$resources['en-GB'] = array();
+	$this->list['en-GB'] = array();
 
 	// Shared resources
-	$resources['en-GB']['Shared'] = array
+	$this->list['en-GB']['Shared'] = array
 	(
 		'Go to'			=> 'Go to'
 	);
 
 	// Home page resources
-	$resources['en-GB']['Home'] = array
+	$this->list['en-GB']['Home'] = array
 	(
 		'Heading'		=> 'Home',
 		'Intro'			=> 'Hello chaps, welcome to the tiny engine demo'
 	);
 	
 	// Shared resources
-	$resources['en-GB']['Contact Us'] = array
+	$this->list['en-GB']['Contact Us'] = array
 	(
 		'Heading'			=> 'Contact Us',
 		'Telephone'			=> 'Telephone',
