@@ -38,8 +38,11 @@
 		public function render()
 		{
 			// Run controller action
-			$action = $this->action;
-			$action($this);
+			if (is_callable($this->action))
+			{
+				$action = $this->action;
+				$action($this);
+			}
 
 			// Present view
 			require_once ($this->app->path . '/views/view-' . $this->name . '.php');

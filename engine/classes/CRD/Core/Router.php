@@ -24,7 +24,7 @@
 		}
 
 		// Build view + action for this route
-		public function add($route, $view, $action)
+		public function add($route, $view, $action = null)
 		{
 			$this->routes[$route] = new View($this->app, $view, $action);
 		}
