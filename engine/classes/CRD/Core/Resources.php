@@ -21,10 +21,8 @@
 		public $resource = array();
 		public $resource_default = array();
 
-		public function __construct($template)
+		public function __construct($template, $path)
 		{
-			global $path;
-		
 			$this->template = $template;
 
 			// Include resources

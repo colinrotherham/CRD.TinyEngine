@@ -37,14 +37,12 @@
 		
 		public function render()
 		{
-			global $path;
-		
 			// Run controller action
 			$action = $this->action;
 			$action($this);
 
 			// Present view
-			require_once ($path . '/views/view-' . $this->name . '.php');
+			require_once ($this->app->path . '/views/view-' . $this->name . '.php');
 		}
 	}
 ?>

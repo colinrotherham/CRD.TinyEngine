@@ -10,6 +10,7 @@
 	class Template
 	{
 		public $view;
+		public $path;
 	
 		public $name = '';
 		public $title = '';
@@ -19,7 +20,7 @@
 		// Template and current placeholder
 		private $template = '';
 		private $placeholder = '';
-		
+
 		// Array of content by placeholder name
 		private $buffer = array();
 
@@ -33,9 +34,12 @@
 			$this->template = $template;
 			$this->name = $name;
 
+			// For template includes, pull path from app
+			$this->path = $view->app->path;
+
 			// Other helpers
 			$this->html = new HTML($this);
-			$this->resources = new Resources($this);
+			$this->resources = new Resources($this, $this->view->app->path);
 		}
 		
 		public function __destruct()
@@ -48,8 +52,6 @@
 		
 		public function placeHolder($name, $content = null, $partial = null)
 		{
-			global $path;
-		
 			$this->placeholder = $name;
 			$this->buffer[$this->placeholder] = '';
 
@@ -67,7 +69,7 @@
 			if (!empty($partial))
 			{
 				// Insert partial content into buffer
-				require_once ($path . '/' . $this->view->partials[$partial]);
+				require_once ($this->path . '/' . $this->view->partials[$partial]);
 				
 				// End placeholder, i.e. close buffer
 				$this->placeHolderEnd();
@@ -94,10 +96,8 @@
 		
 		public function contentPartial($partial, $shared = null)
 		{
-			global $path;
-		
 			// Inject content
-			require_once ($path . '/' . $this->view->partials[$partial]);
+			require_once ($this->path . '/' . $this->view->partials[$partial]);
 		}
 		
 		public function content($name, $return = false)
@@ -110,8 +110,6 @@
 
 		public function render()
 		{
-			global $path;
-		
 			if (!empty($this->placeholder))
 			{
 				$this->placeHolderEnd();
@@ -123,7 +121,7 @@
 			// Include file if not cached
 			if (!$template_content)
 			{
-				$template_file = $path . '/' . $this->view->templates[$this->template];
+				$template_file = $this->path . '/' . $this->view->templates[$this->template];
 
 				// Attempt to cache
 				$this->view->cache->set('template-' . $this->template, file_get_contents($template_file));

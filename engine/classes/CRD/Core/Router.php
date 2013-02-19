@@ -10,19 +10,16 @@
 	class Router
 	{
 		public $app;
-		public $path;
 		public $routes = array();
 
-		public function __construct($app, $path)
+		public function __construct($app)
 		{
 			$this->app = $app;
-			$this->path = $path;
 
 			if (empty($_SERVER['REQUEST_URI']))
 				throw new \Exception("Route error: Can't access request URI");
 
 			// Where are we?
-			$this->path = $path;
 			$this->route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 		}
 

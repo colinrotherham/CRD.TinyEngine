@@ -9,12 +9,8 @@
 
 	class App
 	{
-		// Other helpers
-		public $router;
-		public $cache;
-		public $database;
-		public $redirect;
-
+		public $path;
+	
 		public $version = '';
 		public $name = '';
 		public $templates = array();
@@ -26,8 +22,16 @@
 		public $credentials;
 		public $queries;
 
-		public function __construct()
+		// Other helpers
+		public $router;
+		public $cache;
+		public $database;
+		public $redirect;
+
+		public function __construct($path)
 		{
+			$this->path = $path;
+		
 			$this->credentials = (object) array();
 			$this->queries = (object) array();
 
