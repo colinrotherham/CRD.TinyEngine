@@ -30,4 +30,11 @@
 		'Postcode'			=> 'SK12 1RQ',
 		'Contact Us'		=> 'Contact Us'
 	);
+	
+	// Home page resources
+	$this->list['en-GB']['404'] = array
+	(
+		'Heading'		=> '404',
+		'Intro'			=> 'Sorry, we can’t find this page'
+	);
 ?>

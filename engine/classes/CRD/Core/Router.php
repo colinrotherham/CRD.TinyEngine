@@ -28,8 +28,16 @@
 		{
 			if (!is_array($view) || empty($view[0]))
 				throw new \Exception('Adding route: Invalid view array');
-		
+
 			$this->routes[$route] = new View($this->app, $view[0], $action);
+		}
+
+		public function view()
+		{
+			$view = (isset($this->routes[$this->route]))?
+				$this->routes[$this->route] : null;
+		
+			return $view;
 		}
 
 		public function check()
@@ -37,17 +45,21 @@
 			if (empty($this->routes))
 				throw new \Exception('Checking route: Missing routes table');
 
-			$view = (isset($this->routes[$this->route]))?
-				$this->routes[$this->route] : null;
+			$view = $this->view();
 
 			// No view for this route
 			if (empty($view))
 			{
-				/* 404 */
+				header('Status: 404 Not Found', true, 404);
+
+				// Check for special :404: route
+				$this->route = ':404:';
+				$view = $this->view();
 			}
 
 			// Render route action + view
-			else $view->render();
+			if (!empty($view))
+				$view->render();
 		}
 	}
 ?>
