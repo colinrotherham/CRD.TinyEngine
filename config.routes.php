@@ -10,13 +10,13 @@
 	$app->router = new Router($app, $path);
 
 	// Home
-	$app->router->add('/', 'home', function($view)
+	$app->router->add('/', array('home'), function($view)
 	{
 		$view->template = new Template($view, 'page', 'page-home');
 	});
 
 	// Contact Us
-	$app->router->add('/contact/', 'contact', function($view)
+	$app->router->add('/contact/', array('contact'), function($view)
 	{
 		$view->template = new Template($view, 'page', 'page-contact');
 	});

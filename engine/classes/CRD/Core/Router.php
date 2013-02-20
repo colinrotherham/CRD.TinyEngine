@@ -17,7 +17,7 @@
 			$this->app = $app;
 
 			if (empty($_SERVER['REQUEST_URI']))
-				throw new \Exception("Route error: Can't access request URI");
+				throw new \Exception("Creating router: Can't access request URI");
 
 			// Where are we?
 			$this->route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -26,13 +26,16 @@
 		// Build view + action for this route
 		public function add($route, $view, $action = null)
 		{
-			$this->routes[$route] = new View($this->app, $view, $action);
+			if (!is_array($view) || empty($view[0]))
+				throw new \Exception('Adding route: Invalid view array');
+		
+			$this->routes[$route] = new View($this->app, $view[0], $action);
 		}
 
 		public function check()
 		{
 			if (empty($this->routes))
-				throw new \Exception('Missing routes table');
+				throw new \Exception('Checking route: Missing routes table');
 
 			$view = (isset($this->routes[$this->route]))?
 				$this->routes[$this->route] : null;
