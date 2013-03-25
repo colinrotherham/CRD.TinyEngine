@@ -24,12 +24,18 @@
 		}
 
 		// Build view + action for this route
-		public function add($route, $view, $action = null)
+		public function add($route, $view = null, $action = null)
 		{
-			if (!is_array($view) || empty($view[0]))
-				throw new \Exception('Adding route: Invalid view array');
+			if (is_array($view))
+			{
+				if (empty($view[0]))
+					throw new \Exception('Adding route: Missing view name');
 
-			$this->routes[$route] = new View($this->app, $view[0], $action);
+				// Extract view name from array
+				$view = $view[0];
+			}
+
+			$this->routes[$route] = new View($this->app, $view, $action);
 		}
 
 		public function view()
