@@ -19,7 +19,7 @@
 		public $partials = array();
 
 		// Shared array for passing from route action to view
-		public $bag = array();
+		public $bag;
 	
 		public function __construct($app, $name, $action)
 		{
@@ -33,9 +33,12 @@
 			// Allow views to access templates/partials
 			$this->templates = $app->templates;
 			$this->partials = $app->partials;
-			
+
 			// Provide caching helper
 			$this->cache = $app->cache;
+
+			// Make view bag an object
+			$this->bag = (object) array();
 		}
 		
 		public function location()
