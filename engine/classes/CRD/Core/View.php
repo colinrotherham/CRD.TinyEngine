@@ -27,7 +27,7 @@
 			$this->name = $name;
 			$this->action = $action;
 
-			if (!file_exists($this->location()))
+			if (!empty($this->name) && !file_exists($this->location()))
 				throw new \Exception('Checking view: Missing view file');
 
 			// Allow views to access templates/partials
@@ -52,8 +52,9 @@
 				$action($this);
 			}
 
-			// Present view
-			require_once ($this->location());
+			// Present view if provided
+			if (!empty($this->name))
+				require_once ($this->location());
 		}
 	}
 ?>
