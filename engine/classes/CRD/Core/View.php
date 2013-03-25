@@ -27,12 +27,20 @@
 			$this->name = $name;
 			$this->action = $action;
 
+			if (!file_exists($this->location()))
+				throw new \Exception('Checking view: Missing view file');
+
 			// Allow views to access templates/partials
 			$this->templates = $app->templates;
 			$this->partials = $app->partials;
 			
 			// Provide caching helper
 			$this->cache = $app->cache;
+		}
+		
+		public function location()
+		{
+			return $this->app->path . '/views/' . $this->name . '.php';
 		}
 		
 		public function render()
@@ -45,7 +53,7 @@
 			}
 
 			// Present view
-			require_once ($this->app->path . '/views/view-' . $this->name . '.php');
+			require_once ($this->location());
 		}
 	}
 ?>
