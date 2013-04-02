@@ -9,15 +9,17 @@
 
 	class Redirect
 	{
-		public function to($url, $permanent = false)
+		private $permanent = 301;
+		private $temporary = 302;
+	
+		public function to($url, $is_permanent = false)
 		{
-			if ($permanent)
-			{
-				header('HTTP/1.1 301 Moved Permanently');
-			}
+			// Which status code?
+			$status = ($is_permanent)? $this->permanent : $this->temporary;
 		
 			// Perform redirect
-			header('Location: ' . $url); exit;
+			header('Location: ' . $url, true, $status);
+			exit;
 		}
 	}
 ?>
