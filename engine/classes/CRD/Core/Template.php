@@ -66,13 +66,20 @@
 			// Start buffering page content
 			ob_start();
 
+			// Partial name provided
 			if (!empty($partial))
 			{
-				// Insert partial content into buffer
-				require_once ($this->path . '/' . $this->view->partials[$partial]);
+				// Partial exists in config?
+				if (isset($this->view->partials[$partial]))
+				{
+					// Insert partial content into buffer
+					require_once ($this->path . '/' . $this->view->partials[$partial]);
+
+					// End placeholder, i.e. close buffer
+					$this->placeHolderEnd();
+				}
 				
-				// End placeholder, i.e. close buffer
-				$this->placeHolderEnd();
+				else throw new \Exception("Missing partial: '{$partial}'");
 			}
 		}
 		
