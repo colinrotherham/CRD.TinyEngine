@@ -81,7 +81,7 @@
 				if (isset($this->view->partials[$partial]))
 				{
 					// Insert partial content into buffer
-					require_once ($this->app->path . '/' . $this->view->partials[$partial]);
+					$this->contentPartial($partial);
 
 					// End placeholder, i.e. close buffer
 					$this->placeHolderEnd();
