@@ -27,7 +27,10 @@
 			$this->name = $name;
 			$this->action = $action;
 
-			if (!empty($this->name) && !file_exists($this->location()))
+			if (empty($this->name))
+				throw new \Exception('Creating view: Missing view name');
+
+			else if (!file_exists($this->location()))
 				throw new \Exception('Checking view: Missing view file');
 
 			// Allow views to access templates/partials
