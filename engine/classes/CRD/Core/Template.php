@@ -84,8 +84,6 @@
 				{
 					// Insert partial content into buffer
 					$this->contentPartial($partial);
-
-					// End placeholder, i.e. close buffer
 					$this->placeHolderEnd();
 				}
 				
@@ -133,9 +131,7 @@
 		public function render()
 		{
 			if (!empty($this->placeholder))
-			{
 				$this->placeHolderEnd();
-			}
 
 			// Pull template from cache, save disk IO
 			$template_content = $this->cache->get('template-' . $this->name);
@@ -143,18 +139,13 @@
 			// Include file if not cached
 			if (!$template_content)
 			{
-				// Attempt to cache
+				// Cache for next time + inject content
 				$this->cache->set('template-' . $this->name, file_get_contents($this->location()));
-			
-				// Load the template
 				require_once ($this->location());
 			}
 			
 			// Output from cache and run as PHP
-			else
-			{
-				eval('?>' . $template_content);
-			}
+			else eval('?>' . $template_content);
 		}
 	}
 ?>
