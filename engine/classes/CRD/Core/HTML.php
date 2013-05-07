@@ -9,8 +9,6 @@
 
 	class HTML
 	{
-		private $app;
-
 		public function __construct($template)
 		{
 			$this->template = $template;
