@@ -14,14 +14,14 @@
 	
 		public $view;
 		public $path;
-	
-		public $name = '';
+
+		public $page = '';
 		public $title = '';
 		public $meta = '';
 		public $canonical = '';
 
 		// Template and current placeholder
-		private $template = '';
+		private $name = '';
 		private $placeholder = '';
 
 		// Array of content by placeholder name
@@ -31,11 +31,11 @@
 		public $html;
 		public $resources;
 
-		public function __construct($view, $template, $name = '')
+		public function __construct($view, $template, $page = '')
 		{
 			$this->view = $view;
-			$this->template = $template;
-			$this->name = $name;
+			$this->name = $template;
+			$this->page = $page;
 
 			if (empty($this->view))
 				throw new \Exception("Creating template: Missing view name");
@@ -44,7 +44,7 @@
 			$this->app = $this->view->app;
 			$this->cache = $this->app->cache;
 
-			if (empty($this->template))
+			if (empty($this->name))
 				throw new \Exception("Creating template: Missing template name");
 
 			else if (!file_exists($this->location()))
@@ -127,7 +127,7 @@
 
 		public function location()
 		{
-			return $this->app->path . '/templates/' . $this->template . '.php';
+			return $this->app->path . '/templates/' . $this->name . '.php';
 		}
 
 		public function render()
@@ -138,13 +138,13 @@
 			}
 
 			// Pull template from cache, save disk IO
-			$template_content = $this->cache->get('template-' . $this->template);
+			$template_content = $this->cache->get('template-' . $this->name);
 
 			// Include file if not cached
 			if (!$template_content)
 			{
 				// Attempt to cache
-				$this->cache->set('template-' . $this->template, file_get_contents($this->location()));
+				$this->cache->set('template-' . $this->name, file_get_contents($this->location()));
 			
 				// Load the template
 				require_once ($this->location());

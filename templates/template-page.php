@@ -20,7 +20,7 @@
 		<!-- Initialise advanced UI -->
 		<script>document.documentElement.className = 'advanced';</script>
 	</head>
-	<body class="<?= $html->entities($this->name) ?>">
+	<body class="<?= $html->entities($this->page) ?>">
 	
 		<div id="container">
 <?= $this->content('main') ?>
