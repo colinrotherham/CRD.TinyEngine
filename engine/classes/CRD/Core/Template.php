@@ -20,9 +20,12 @@
 		public $meta = '';
 		public $canonical = '';
 
-		// Template and current placeholder
+		// Template name and current placeholder
 		private $name = '';
 		private $placeholder = '';
+
+		// Store this template's PHP file name
+		private $template;
 
 		// Array of content by placeholder name
 		private $buffer = array();
@@ -49,6 +52,9 @@
 
 			else if (!file_exists($this->location()))
 				throw new \Exception('Checking template: Missing template file');
+
+			// Store template for later
+			$this->template = $this->location();
 
 			// Other helpers
 			$this->html = new HTML($this);
@@ -140,8 +146,8 @@
 			if (!$template_content)
 			{
 				// Cache for next time + inject content
-				$this->cache->set('template-' . $this->name, file_get_contents($this->location()));
-				require_once ($this->location());
+				$this->cache->set('template-' . $this->name, file_get_contents($this->template));
+				require_once ($this->template);
 			}
 			
 			// Output from cache and run as PHP
