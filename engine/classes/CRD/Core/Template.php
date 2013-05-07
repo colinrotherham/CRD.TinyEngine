@@ -9,6 +9,8 @@
 
 	class Template
 	{
+		public $app;
+	
 		public $view;
 		public $path;
 	
@@ -30,18 +32,21 @@
 
 		public function __construct($view, $template, $name = '')
 		{
-			if (empty($view))
-				throw new \Exception("Creating template: Missing view name");
-			
-			if (empty($template))
-				throw new \Exception("Creating template: Missing template name");
-		
 			$this->view = $view;
 			$this->template = $template;
 			$this->name = $name;
 
-			// For template includes, pull path from app
-			$this->path = $view->app->path;
+			if (empty($this->view))
+				throw new \Exception("Creating template: Missing view name");
+
+			// For template includes, pull app from view
+			$this->app = $this->view->app;
+
+			if (empty($this->template))
+				throw new \Exception("Creating template: Missing template name");
+
+			else if (!file_exists($this->location()))
+				throw new \Exception('Checking template: Missing template file');
 
 			// Other helpers
 			$this->html = new HTML($this);
@@ -50,10 +55,7 @@
 		
 		public function __destruct()
 		{
-			if (isset($this->view->templates[$this->template]))
-				$this->render();
-
-			else throw new \Exception("Missing template: '{$this->template}'");
+			$this->render();
 		}
 		
 		public function placeHolder($name, $content = null, $partial = null)
@@ -79,7 +81,7 @@
 				if (isset($this->view->partials[$partial]))
 				{
 					// Insert partial content into buffer
-					require_once ($this->path . '/' . $this->view->partials[$partial]);
+					require_once ($this->app->path . '/' . $this->view->partials[$partial]);
 
 					// End placeholder, i.e. close buffer
 					$this->placeHolderEnd();
@@ -110,7 +112,7 @@
 		public function contentPartial($partial, $shared = null)
 		{
 			// Inject content
-			require_once ($this->path . '/' . $this->view->partials[$partial]);
+			require_once ($this->app->path . '/' . $this->view->partials[$partial]);
 		}
 		
 		public function content($name, $return = false)
@@ -119,6 +121,11 @@
 			
 			if (!$return) echo $content;
 			else return $content;
+		}
+
+		public function location()
+		{
+			return $this->app->path . '/templates/' . $this->template . '.php';
 		}
 
 		public function render()
@@ -134,13 +141,11 @@
 			// Include file if not cached
 			if (!$template_content)
 			{
-				$template_file = $this->path . '/' . $this->view->templates[$this->template];
-
 				// Attempt to cache
-				$this->view->cache->set('template-' . $this->template, file_get_contents($template_file));
+				$this->view->cache->set('template-' . $this->template, file_get_contents($this->location()));
 			
 				// Load the template
-				require_once ($template_file);
+				require_once ($this->location());
 			}
 			
 			// Output from cache and run as PHP

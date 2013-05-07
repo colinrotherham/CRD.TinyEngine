@@ -17,12 +17,6 @@
 	
 	// Set app version string
 	$app->version = '1.0';
-
-	// Page templates
-	$app->templates = array
-	(
-		'page'		=> '/templates/template-page.php'
-	);
 	
 	// Page partials
 	$app->partials = array
