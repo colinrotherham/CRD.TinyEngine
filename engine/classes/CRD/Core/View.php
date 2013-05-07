@@ -10,6 +10,8 @@
 	class View
 	{
 		public $app;
+		public $cache;
+
 		public $name;
 		public $action;
 		public $template;
@@ -34,10 +36,10 @@
 				throw new \Exception('Checking view: Missing view file');
 
 			// Allow views to access partials
-			$this->partials = $app->partials;
+			$this->partials = $this->app->partials;
 
 			// Provide caching helper
-			$this->cache = $app->cache;
+			$this->cache = $this->app->cache;
 
 			// Make view bag an object
 			$this->bag = (object) array();

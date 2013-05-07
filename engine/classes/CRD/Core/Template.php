@@ -10,6 +10,7 @@
 	class Template
 	{
 		public $app;
+		public $cache;
 	
 		public $view;
 		public $path;
@@ -39,8 +40,9 @@
 			if (empty($this->view))
 				throw new \Exception("Creating template: Missing view name");
 
-			// For template includes, pull app from view
+			// Pull app and cache helper from view
 			$this->app = $this->view->app;
+			$this->cache = $this->app->cache;
 
 			if (empty($this->template))
 				throw new \Exception("Creating template: Missing template name");
@@ -136,13 +138,13 @@
 			}
 
 			// Pull template from cache, save disk IO
-			$template_content = $this->view->cache->get('template-' . $this->template);
+			$template_content = $this->cache->get('template-' . $this->template);
 
 			// Include file if not cached
 			if (!$template_content)
 			{
 				// Attempt to cache
-				$this->view->cache->set('template-' . $this->template, file_get_contents($this->location()));
+				$this->cache->set('template-' . $this->template, file_get_contents($this->location()));
 			
 				// Load the template
 				require_once ($this->location());
