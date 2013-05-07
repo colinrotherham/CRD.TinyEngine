@@ -30,6 +30,12 @@
 
 		public function __construct($view, $template, $name = '')
 		{
+			if (empty($view))
+				throw new \Exception("Creating template: Missing view name");
+			
+			if (empty($template))
+				throw new \Exception("Creating template: Missing template name");
+		
 			$this->view = $view;
 			$this->template = $template;
 			$this->name = $name;
