@@ -21,13 +21,24 @@
 		public $resource = array();
 		public $resource_default = array();
 
+		// Other helpers
+		private $file;
+
 		public function __construct($template, $path)
 		{
 			$this->template = $template;
+			$this->file = new File($template);
 
-			// Include resources
-			foreach (glob($path . '/resources/*.php') as $resource_filename)
-				require_once ($resource_filename);
+			// Loop resource filenames
+			foreach (glob($path . '/resources/*.php') as $file)
+			{
+				$info = pathinfo($file);
+				$name = basename($file, '.' . $info['extension']);
+
+				// Inject from cache if possible
+				$context = (object) array('name' => 'resources', 'scope' => $this);
+				$this->file->inject($file, 'resource-' . $name, $context);
+			}
 
 			// Assume default locale for now (may be overridden later)
 			$this->setLocale();

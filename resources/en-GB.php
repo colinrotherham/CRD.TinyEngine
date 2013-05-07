@@ -2,23 +2,23 @@
 	namespace CRD\Core;
 
 	// Start new resource
-	$this->list['en-GB'] = array();
+	$resources->list['en-GB'] = array();
 
 	// Shared resources
-	$this->list['en-GB']['Shared'] = array
+	$resources->list['en-GB']['Shared'] = array
 	(
 		'Go to'			=> 'Go to'
 	);
 
 	// Home page resources
-	$this->list['en-GB']['Home'] = array
+	$resources->list['en-GB']['Home'] = array
 	(
 		'Heading'		=> 'Home',
 		'Intro'			=> 'Hello chaps, welcome to the tiny engine demo'
 	);
 	
 	// Shared resources
-	$this->list['en-GB']['Contact Us'] = array
+	$resources->list['en-GB']['Contact Us'] = array
 	(
 		'Heading'			=> 'Contact Us',
 		'Telephone'			=> 'Telephone',
@@ -32,7 +32,7 @@
 	);
 	
 	// Home page resources
-	$this->list['en-GB']['404'] = array
+	$resources->list['en-GB']['404'] = array
 	(
 		'Heading'		=> '404',
 		'Intro'			=> 'Sorry, we can’t find this page'

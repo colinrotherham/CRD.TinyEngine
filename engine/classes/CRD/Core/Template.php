@@ -10,7 +10,6 @@
 	class Template
 	{
 		public $app;
-		public $cache;
 	
 		public $view;
 		public $path;
@@ -31,7 +30,9 @@
 		private $buffer = array();
 
 		// Other helpers
+		public $cache;
 		public $html;
+		public $file;
 		public $resources;
 
 		public function __construct($view, $name, $page = '')
@@ -58,6 +59,7 @@
 
 			// Other helpers
 			$this->html = new HTML($this);
+			$this->file = new File($this);
 			$this->resources = new Resources($this, $this->view->app->path);
 		}
 		
@@ -117,20 +119,9 @@
 		
 		public function contentPartial($partial, $shared = null)
 		{
-			// Pull partial from cache, save disk IO
-			$partial_file = $this->location($partial, true);
-			$partial_content = $this->cache->get('partial-' . $partial);
-
-			// Include file if not cached
-			if (!$partial_content)
-			{
-				// Cache for next time + inject content
-				$this->cache->set('partial-' . $partial, file_get_contents($partial_file));
-				require_once ($partial_file);
-			}
-			
-			// Output from cache and run as PHP
-			else eval('?>' . $partial_content);
+			// Inject file, from cache if possible
+			$context = (!empty($shared))? (object) array('name' => 'shared', 'scope' => $shared) : null;
+			$this->file->inject($this->location($partial, true), 'partial-' . $partial, $context);
 		}
 		
 		public function content($name, $return = false)
@@ -141,7 +132,7 @@
 			else return $content;
 		}
 
-		public function location($name, $is_partial = false)
+		public function location($name = '', $is_partial = false)
 		{
 			if (empty($name))
 				$name = $this->name;
@@ -154,19 +145,9 @@
 			if (!empty($this->placeholder))
 				$this->placeHolderEnd();
 
-			// Pull template from cache, save disk IO
-			$template_content = $this->cache->get('template-' . $this->name);
-
-			// Include file if not cached
-			if (!$template_content)
-			{
-				// Cache for next time + inject content
-				$this->cache->set('template-' . $this->name, file_get_contents($this->template));
-				require_once ($this->template);
-			}
-			
-			// Output from cache and run as PHP
-			else eval('?>' . $template_content);
+			// Inject file, from cache if possible
+			$context = (object) array('name' => 'template', 'scope' => $this);
+			$this->file->inject($this->template, 'template-' . $this->name, $context);
 		}
 	}
 ?>
