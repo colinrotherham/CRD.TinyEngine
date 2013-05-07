@@ -33,8 +33,7 @@
 			else if (!file_exists($this->location()))
 				throw new \Exception('Checking view: Missing view file');
 
-			// Allow views to access templates/partials
-			$this->templates = $app->templates;
+			// Allow views to access partials
 			$this->partials = $app->partials;
 
 			// Provide caching helper

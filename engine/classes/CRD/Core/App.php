@@ -13,7 +13,6 @@
 	
 		public $version = '';
 		public $name = '';
-		public $templates = array();
 		public $partials = array();
 
 		public $cache_enabled = true;
