@@ -31,10 +31,10 @@
 		public $html;
 		public $resources;
 
-		public function __construct($view, $template, $page = '')
+		public function __construct($view, $name, $page = '')
 		{
 			$this->view = $view;
-			$this->name = $template;
+			$this->name = $name;
 			$this->page = $page;
 
 			if (empty($this->view))
