@@ -86,7 +86,7 @@
 			if (!empty($partial))
 			{
 				// Partial exists in config?
-				if (isset($this->view->partials[$partial]))
+				if (file_exists($this->location($partial, true)))
 				{
 					// Insert partial content into buffer
 					$this->contentPartial($partial);
@@ -117,8 +117,20 @@
 		
 		public function contentPartial($partial, $shared = null)
 		{
-			// Inject content
-			require_once ($this->app->path . '/' . $this->view->partials[$partial]);
+			// Pull partial from cache, save disk IO
+			$partial_file = $this->location($partial, true);
+			$partial_content = $this->cache->get('partial-' . $partial);
+
+			// Include file if not cached
+			if (!$partial_content)
+			{
+				// Cache for next time + inject content
+				$this->cache->set('partial-' . $partial, file_get_contents($partial_file));
+				require_once ($partial_file);
+			}
+			
+			// Output from cache and run as PHP
+			else eval('?>' . $partial_content);
 		}
 		
 		public function content($name, $return = false)
@@ -129,9 +141,12 @@
 			else return $content;
 		}
 
-		public function location()
+		public function location($name, $is_partial = false)
 		{
-			return $this->app->path . '/templates/' . $this->name . '.php';
+			if (empty($name))
+				$name = $this->name;
+		
+			return $this->app->path . (($is_partial)? '/views/partials/' : '/templates/') . $name . '.php';
 		}
 
 		public function render()

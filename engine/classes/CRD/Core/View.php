@@ -16,10 +16,6 @@
 		public $action;
 		public $template;
 
-		// All templates and partials
-		public $templates = array();
-		public $partials = array();
-
 		// Shared array for passing from route action to view
 		public $bag;
 	
@@ -34,9 +30,6 @@
 
 			else if (!file_exists($this->location()))
 				throw new \Exception('Checking view: Missing view file');
-
-			// Allow views to access partials
-			$this->partials = $this->app->partials;
 
 			// Provide caching helper
 			$this->cache = $this->app->cache;
