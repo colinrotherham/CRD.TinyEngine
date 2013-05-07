@@ -10,11 +10,13 @@
 	class View
 	{
 		public $app;
-		public $cache;
 
 		public $name;
 		public $action;
 		public $template;
+
+		// Other helpers
+		public $cache;
 
 		// Shared array for passing from route action to view
 		public $bag;
@@ -54,7 +56,11 @@
 
 			// Present view if provided
 			if (!empty($this->name))
-				require_once ($this->location());
+			{
+				// Inject file, from cache if possible
+				$context = (object) array('name' => 'view', 'scope' => $this);
+				$this->template->file->inject($this->location(), 'view-' . $this->name, $context);
+			}
 		}
 	}
 ?>

@@ -1,5 +1,5 @@
 <?php
-	$template = $this->template;
+	$template = $view->template;
 	$resources = $template->resources;
 
 	$template->title = 'Sorry, page not found';
