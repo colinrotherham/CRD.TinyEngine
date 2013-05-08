@@ -112,7 +112,7 @@
 			}
 		}
 		
-		public function placeHolderPartial($name, $partial, $shared)
+		public function placeHolderPartial($name, $partial, $shared = null)
 		{
 			$this->placeHolder($name, null, $partial, $shared);
 		}
