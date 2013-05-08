@@ -27,10 +27,7 @@
 			$this->name = $name;
 			$this->action = $action;
 
-			if (empty($this->name))
-				throw new \Exception('Creating view: Missing view name');
-
-			else if (!file_exists($this->location()))
+			if (isset($this->name) && !file_exists($this->location()))
 				throw new \Exception('Checking view: Missing view file');
 
 			// Other helpers
