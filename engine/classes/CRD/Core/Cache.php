@@ -27,8 +27,6 @@
 
 			if (function_exists('apc_fetch') && $this->cache_enabled)
 			{
-				error_log($this->app->name . ' ' . $cache_name);
-			
 				$cache_value = apc_fetch($this->app->name . ' ' . $cache_name, $success);
 				if ($success) return $cache_value;
 			}
