@@ -33,8 +33,9 @@
 			else if (!file_exists($this->location()))
 				throw new \Exception('Checking view: Missing view file');
 
-			// Provide caching helper
+			// Other helpers
 			$this->cache = $this->app->cache;
+			$this->file = new File($this->cache);
 
 			// Make view bag an object
 			$this->bag = (object) array();
@@ -56,10 +57,10 @@
 
 			// Present view if provided
 			if (!empty($this->name))
-			{
+			{			
 				// Inject file, from cache if possible
 				$context = (object) array('name' => 'view', 'scope' => $this);
-				$this->template->file->inject($this->location(), 'view-' . $this->name, $context);
+				$this->file->inject($this->location(), 'view-' . $this->name, $context);
 			}
 		}
 	}

@@ -59,7 +59,7 @@
 
 			// Other helpers
 			$this->html = new HTML($this);
-			$this->file = new File($this);
+			$this->file = new File($this->cache, $this);
 			$this->resources = new Resources($this, $this->view->app->path);
 		}
 		

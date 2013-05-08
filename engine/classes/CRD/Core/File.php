@@ -10,11 +10,12 @@
 	class File
 	{
 		private $cache;
+		private $template;
 	
-		public function __construct($template)
+		public function __construct($cache, $template = null)
 		{
+			$this->cache = $cache;
 			$this->template = $template;
-			$this->cache = $template->cache;
 		}
 	
 		public function inject($file, $name, $context = null)
@@ -24,7 +25,6 @@
 				${$context->name} = $context->scope;
 		
 			// Pull content from cache, saves disk IO
-			$template = $this->template;
 			$content = $this->cache->get($name);
 
 			// Include file if not cached

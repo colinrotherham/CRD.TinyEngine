@@ -27,7 +27,7 @@
 		public function __construct($template, $path)
 		{
 			$this->template = $template;
-			$this->file = new File($template);
+			$this->file = new File($template->cache, $template);
 
 			// Loop resource filenames
 			foreach (glob($path . '/resources/*.php') as $file)
