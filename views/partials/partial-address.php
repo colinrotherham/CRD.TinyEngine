@@ -1,6 +1,7 @@
 <?php
 	namespace CRD\Core;
 
+	$template = $this->template;
 	$resources = $template->resources;
 
 	// Resource example
