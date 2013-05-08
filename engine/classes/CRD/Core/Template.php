@@ -68,7 +68,7 @@
 			$this->render();
 		}
 		
-		public function placeHolder($name, $content = null, $partial = null)
+		public function placeHolder($name, $content = null, $partial = null, $partial_shared = null)
 		{
 			$this->placeholder = $name;
 			$this->buffer[$this->placeholder] = '';
@@ -91,7 +91,7 @@
 				if (file_exists($this->location($partial, true)))
 				{
 					// Insert partial content into buffer
-					$this->contentPartial($partial);
+					$this->contentPartial($partial, $partial_shared);
 					$this->placeHolderEnd();
 				}
 				
@@ -112,9 +112,9 @@
 			}
 		}
 		
-		public function placeHolderPartial($name, $partial)
+		public function placeHolderPartial($name, $partial, $shared)
 		{
-			$this->placeHolder($name, null, $partial);
+			$this->placeHolder($name, null, $partial, $shared);
 		}
 		
 		public function contentPartial($partial, $shared = null)
