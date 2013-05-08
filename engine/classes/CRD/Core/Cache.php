@@ -9,13 +9,13 @@
 
 	class Cache
 	{
-		private $name;
+		private $app;
 		private $cache_enabled;
 		private $cache_length;
 
-		public function __construct($name, $cache_enabled, $cache_length)
+		public function __construct($app, $cache_enabled, $cache_length)
 		{
-			$this->name = $name;
+			$this->app = $app;
 			$this->cache_enabled = $cache_enabled;
 			$this->cache_length = $cache_length;
 		}
@@ -27,7 +27,9 @@
 
 			if (function_exists('apc_fetch') && $this->cache_enabled)
 			{
-				$cache_value = apc_fetch($this->name . ' ' . $cache_name, $success);
+				error_log($this->app->name . ' ' . $cache_name);
+			
+				$cache_value = apc_fetch($this->app->name . ' ' . $cache_name, $success);
 				if ($success) return $cache_value;
 			}
 			
@@ -38,7 +40,7 @@
 		{
 			if (function_exists('apc_store') && $this->cache_enabled)
 			{
-				return apc_store($this->name . ' ' . $cache_name, $cache_value, $this->cache_length);
+				return apc_store($this->app->name . ' ' . $cache_name, $cache_value, $this->cache_length);
 			}
 			
 			return false;
@@ -48,7 +50,7 @@
 		{
 			if (function_exists('apc_delete') && $this->cache_enabled)
 			{
-				return apc_delete($this->name . ' ' . $cache_name);
+				return apc_delete($this->app->name . ' ' . $cache_name);
 			}
 			
 			return false;
