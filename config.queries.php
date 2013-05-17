@@ -8,3 +8,4 @@
 
 	// Sample query
 	$app->queries->sample = "";
+?>
