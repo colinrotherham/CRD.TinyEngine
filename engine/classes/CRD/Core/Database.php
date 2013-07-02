@@ -19,15 +19,13 @@
 			$this->credentials = $credentials;
 		}
 
-		public function query($query, $multiple = false)
+		public function query($query)
 		{
-			if (is_object($this->connection))
-			{
-				$this->result = ($multiple)? $this->connection->multi_query($query) : $this->connection->query($query);
-			}
-			
-			else throw new \Exception('Failed to connect to database');
-			
+			if (!is_object($this->connection))
+				throw new \Exception('Failed to connect to database');
+
+			$this->result = $this->connection->query($query);
+
 			return $this->result;
 		}
 		
