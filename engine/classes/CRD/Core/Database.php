@@ -104,7 +104,8 @@
 					if (!$this->result)
 						$this->result = array();
 	
-					$this->result[] = $row;
+					// Don't assign by reference
+					$this->result[] = unserialize(serialize($row));
 				}
 			}
 
