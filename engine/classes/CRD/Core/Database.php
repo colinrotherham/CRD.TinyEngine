@@ -19,24 +19,6 @@
 			$this->credentials = $credentials;
 		}
 
-		public function query($query)
-		{
-			if (!is_object($this->connection))
-				throw new \Exception('Failed to connect to database');
-
-			$this->result = $this->connection->query($query);
-
-			return $this->result;
-		}
-		
-		public function queryClose()
-		{
-			if (is_object($this->result))
-			{
-				$this->result->close();
-			}
-		}
-		
 		public function connect()
 		{
 			// Bring up a database connection
@@ -47,21 +29,89 @@
 				$this->credentials->password,
 				$this->credentials->database
 			);
-			
+
 			// Any errors?
 			$success = (!$this->connection->connect_error)? true : false;
-			
-			if ($success)
-			{
-				$this->connection->set_charset('utf8');
-			}
-			
+
+			// Default character set
+			if ($success) $this->connection->set_charset('utf8');
+
 			return $success;
 		}
 		
 		public function escape($string)
 		{
 			return $this->connection->escape_string($string);
+		}
+
+		public function query($query, $options)
+		{
+			if (!is_object($this->connection))
+				throw new \Exception('Database connection: Failed');
+
+			// Build query param types/values
+			if (!empty($options))
+			{
+				foreach ($options as $value)
+				{
+					$types[] = $value[0];
+					$params[] = &$value[1];
+				}
+			}
+
+			// Prepare query
+			return $this->prepare($this->connection->prepare($query), array_merge($types, $params));
+		}
+
+		private function prepare($statement, $params_combined)
+		{
+			// Prepare statement
+			if (!$statement)
+				throw new \Exception('Database prepared statement: Failed');
+
+			// Bind params and run query
+			if (!empty($params_combined))
+				call_user_func_array(array($statement, 'bind_param'), $params_combined);
+
+			// Run query
+			return $this->execute($statement);
+		}
+
+		private function execute($statement)
+		{
+			$row = array();
+
+			// Run query
+			$statement->execute();
+			$statement->store_result();
+
+			// Any rows?
+			if ($statement->num_rows)
+			{
+				// Extract result columns
+				$meta = $statement->result_metadata();
+	
+				// Loop columns, create column placeholders
+				while ($field = $meta->fetch_field())
+					$columns[] = &$row[$field->name];
+	
+				// Bind result columns
+				call_user_func_array(array($statement, 'bind_result'), $columns);
+	
+				// Grab results
+				while ($statement->fetch())
+				{
+					if (!$this->result)
+						$this->result = array();
+	
+					$this->result[] = $row;
+				}
+			}
+
+			// Close query
+			$statement->close();
+
+			return $this->result;
 		}
 	}
 ?>
