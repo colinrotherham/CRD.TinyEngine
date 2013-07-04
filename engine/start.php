@@ -19,5 +19,8 @@
 
 	// Include main config + routes
 	require_once ($path . '/config.php');
-	require_once ($path . '/config.routes.php');
+
+	// Start web router when not running on CLI
+	if (PHP_SAPI !== 'cli')
+		require_once ($path . '/config.routes.php');
 ?>
