@@ -8,7 +8,7 @@
 	namespace CRD\Core;
 
 	// Where are we?
-	$path = realpath(getcwd() . '/../');
+	$path = (isset($path))? $path : realpath(getcwd() . '/../');
 
 	// Include class auto-loader
 	require_once ($path . '/engine/classes/SplClassLoader.php');
