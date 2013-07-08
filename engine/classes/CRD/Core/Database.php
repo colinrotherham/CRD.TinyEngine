@@ -49,29 +49,36 @@
 			if (!is_object($this->connection))
 				throw new \Exception('Database connection: Failed');
 
+			$types = '';
+			$params = [];
+
 			// Build query param types/values
 			if (!empty($options))
 			{
-				foreach ($options as $value)
+				foreach ($options as $i => $value)
 				{
-					$types[] = $value[0];
-					$params[] = &$value[1];
+					$types .= $value[0];
+					$params[] = &$options[$i][1];
 				}
 			}
 
 			// Prepare query
-			return $this->prepare($this->connection->prepare($query), array_merge(array(implode($types)), $params));
+			$statement = $this->connection->prepare($query);
+			return $this->prepare($statement, $types, $params);
 		}
 
-		private function prepare($statement, $params_combined)
+		private function prepare($statement, $types, $params)
 		{
 			// Prepare statement
 			if (!$statement)
 				throw new \Exception('Database prepared statement: Failed');
 
+			// Add types to params
+			array_unshift($params, $types);
+
 			// Bind params and run query
-			if (!empty($params_combined))
-				call_user_func_array(array($statement, 'bind_param'), $params_combined);
+			if (!empty($params))
+				call_user_func_array(array($statement, 'bind_param'), $params);
 
 			// Run query
 			return $this->execute($statement);
