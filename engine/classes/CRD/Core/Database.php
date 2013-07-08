@@ -44,7 +44,7 @@
 			return $this->connection->escape_string($string);
 		}
 
-		public function query($query, $options)
+		public function query($query, $options = array())
 		{
 			if (!is_object($this->connection))
 				throw new \Exception('Database connection: Failed');
@@ -73,12 +73,13 @@
 			if (!$statement)
 				throw new \Exception('Database prepared statement: Failed');
 
-			// Add types to params
-			array_unshift($params, $types);
-
 			// Bind params and run query
 			if (!empty($params))
+			{
+				// Add types to params, bind
+				array_unshift($params, $types);
 				call_user_func_array(array($statement, 'bind_param'), $params);
+			}
 
 			// Run query
 			return $this->execute($statement);
