@@ -60,7 +60,7 @@
 			}
 
 			// Prepare query
-			return $this->prepare($this->connection->prepare($query), array_merge($types, $params));
+			return $this->prepare($this->connection->prepare($query), array_merge(array(implode($types)), $params));
 		}
 
 		private function prepare($statement, $params_combined)
