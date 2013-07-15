@@ -50,7 +50,7 @@
 				throw new \Exception('Database connection: Failed');
 
 			$types = '';
-			$params = [];
+			$params = array();
 
 			// Build query param types/values
 			if (!empty($options))
