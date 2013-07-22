@@ -4,6 +4,7 @@
 	$resources = $template->resources;
 	$html = $template->html;
 	$app = $template->view->app;
+	$router = $app->router;
 
 ?><!doctype html>
 <html lang="<?= $html->entities($resources->locale) ?>">
@@ -15,7 +16,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<!-- CSS includes -->
-		<link rel="stylesheet" href="/assets/css/engine.css?cache=<?= urlencode($app->version) ?>">
+		<link rel="stylesheet" href="<?= $router->directory ?>/assets/css/engine.css?cache=<?= urlencode($app->version) ?>">
 		
 		<!-- Initialise advanced UI -->
 		<script>document.documentElement.className = 'advanced';</script>
