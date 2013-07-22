@@ -9,11 +9,6 @@
 
 	class HTML
 	{
-		public function __construct($template)
-		{
-			$this->template = $template;
-		}
-
 		public function entities($value)
 		{
 			return htmlentities($value, ENT_QUOTES, 'UTF-8');

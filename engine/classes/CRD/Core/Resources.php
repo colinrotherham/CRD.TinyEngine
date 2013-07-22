@@ -9,8 +9,6 @@
 
 	class Resources
 	{
-		private $template;
-
 		public $locale = '';
 		public $locale_default = 'en-GB';
 
@@ -22,15 +20,17 @@
 		public $resource_default = array();
 
 		// Other helpers
+		private $cache;
+		private $helper;
 		private $file;
 
-		public function __construct($template, $path)
+		public function __construct($template, $cache)
 		{
-			$this->template = $template;
-			$this->file = new File($template->cache, $template);
+			$this->helper = $template->html;
+			$this->file = new File($cache, $template);
 
 			// Loop resource filenames
-			foreach (glob($path . '/resources/*.php') as $file)
+			foreach (glob($template->path . '/resources/*.php') as $file)
 			{
 				$info = pathinfo($file);
 				$name = basename($file, '.' . $info['extension']);
@@ -59,7 +59,7 @@
 			if (isset($this->list[$this->locale_default]))
 				$this->resource_default = $this->list[$this->locale_default];
 		}
-		
+
 		// Get text string by key
 		public function get($category, $key)
 		{
@@ -101,10 +101,10 @@
 
 			return $string;
 		}
-		
+
 		public function html($category, $key, $find_replaces = null)
 		{
-			$resource = $this->template->html->entities($this->get($category, $key));
+			$resource = $this->helper->entities($this->get($category, $key));
 
 			if ($find_replaces) foreach ($find_replaces as $find_replace)
 			{

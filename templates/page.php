@@ -3,8 +3,8 @@
 
 	$resources = $template->resources;
 	$html = $template->html;
-	$app = $template->view->app;
-	$router = $app->router;
+	$app = $template->app;
+	$router = $template->router;
 
 ?><!doctype html>
 <html lang="<?= $html->entities($resources->locale) ?>">

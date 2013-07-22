@@ -10,43 +10,42 @@
 	class Template
 	{
 		public $app;
-	
-		public $view;
-		public $path;
 
 		public $page = '';
 		public $title = '';
-		public $meta = '';
-		public $canonical = '';
+		public $path = '';
 
 		// Template name and current placeholder
 		private $name = '';
 		private $placeholder = '';
 
 		// Store this template's PHP file name
-		private $template;
+		private $filename;
 
 		// Array of content by placeholder name
 		private $buffer = array();
 
 		// Other helpers
-		public $cache;
+		public $router;
 		public $html;
 		public $file;
 		public $resources;
 
-		public function __construct($view, $name, $page = '')
+		public function __construct($app, $name, $page = '')
 		{
-			$this->view = $view;
+			$this->path = $app->path;
 			$this->name = $name;
 			$this->page = $page;
 
-			if (empty($this->view))
-				throw new \Exception("Creating template: Missing view name");
+			// Other helpers
+			$this->router = $app->router;
 
-			// Pull app and cache helper from view
-			$this->app = $this->view->app;
-			$this->cache = $this->app->cache;
+			// Store template-specific app properties
+			$this->app = (object) array
+			(
+				'name' => $app->name,
+				'version' => $app->version
+			);
 
 			if (empty($this->name))
 				throw new \Exception("Creating template: Missing template name");
@@ -55,12 +54,12 @@
 				throw new \Exception('Checking template: Missing template file');
 
 			// Store template for later
-			$this->template = $this->location();
+			$this->filename = $this->location();
 
 			// Other helpers
-			$this->html = new HTML($this);
-			$this->file = new File($this->cache, $this);
-			$this->resources = new Resources($this, $this->view->app->path);
+			$this->html = new HTML();
+			$this->file = new File($app->cache, $this);
+			$this->resources = new Resources($this, $app->cache);
 		}
 		
 		public function __destruct()
@@ -137,7 +136,7 @@
 			if (empty($name))
 				$name = $this->name;
 		
-			return $this->app->path . (($is_partial)? '/views/partials/' : '/templates/') . $name . '.php';
+			return $this->path . (($is_partial)? '/views/partials/' : '/templates/') . $name . '.php';
 		}
 
 		public function render()
@@ -147,7 +146,7 @@
 
 			// Inject file, from cache if possible
 			$context = (object) array('name' => 'template', 'scope' => $this);
-			$this->file->inject($this->template, 'template-' . $this->name, $context);
+			$this->file->inject($this->filename, 'template-' . $this->name, $context);
 		}
 	}
 ?>
