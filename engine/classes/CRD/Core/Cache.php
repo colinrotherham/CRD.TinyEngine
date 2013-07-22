@@ -9,51 +9,48 @@
 
 	class Cache
 	{
-		private $app;
-		private $cache_enabled;
-		private $cache_length;
+		private $prefix;
+		private $enabled;
+		private $length;
 
-		public function __construct($app, $cache_enabled, $cache_length)
+		public function __construct($prefix, $enabled, $length)
 		{
-			$this->app = $app;
-			$this->cache_enabled = $cache_enabled;
-			$this->cache_length = $cache_length;
+			$this->prefix = $prefix;
+			$this->enabled = $enabled;
+			$this->length = $length;
 		}
-	
-		public function get($cache_name)
+
+		public function get($name)
 		{
 			$success = false;
-			$cache_value = null;
+			$value = null;
 
-			if (function_exists('apc_fetch') && $this->cache_enabled)
-			{
-				$cache_value = apc_fetch($this->app->name . ' ' . $cache_name, $success);
-				if ($success) return $cache_value;
-			}
-			
-			return false;
+			if (function_exists('apc_fetch') && $this->enabled)
+				$value = apc_fetch("{$this->prefix} {$name}", $success);
+
+			return ($success)? $value : false;
 		}
 
-		public function set($cache_name, $cache_value)
+		public function set($name, $value)
 		{
-			if (function_exists('apc_store') && $this->cache_enabled)
-			{
-				return apc_store($this->app->name . ' ' . $cache_name, $cache_value, $this->cache_length);
-			}
-			
-			return false;
+			$success = false;
+
+			if (function_exists('apc_store') && $this->enabled)
+				$success = apc_store("{$this->prefix} {$name}", $value, $this->length);
+
+			return $success;
 		}
-		
-		public function delete($cache_name)
+
+		public function delete($name)
 		{
-			if (function_exists('apc_delete') && $this->cache_enabled)
-			{
-				return apc_delete($this->app->name . ' ' . $cache_name);
-			}
-			
-			return false;
+			$success = false;
+
+			if (function_exists('apc_delete') && $this->enabled)
+				$success = apc_delete("{$this->prefix} {$name}");
+
+			return $success;
 		}
-		
+
 		public function clear()
 		{
 			apc_clear_cache('user');
