@@ -11,19 +11,19 @@
 	{
 		private $cache;
 		private $template;
-	
+
 		public function __construct($cache, $template = null)
 		{
 			$this->cache = $cache;
 			$this->template = $template;
 		}
-	
+
 		public function inject($file, $name, $context = null)
 		{
 			// Set magic scope
 			if (is_object($context) && !empty($context->name) && !empty($context->scope))
 				${$context->name} = $context->scope;
-		
+
 			// Pull content from cache, saves disk IO
 			$content = $this->cache->get($name);
 
@@ -34,7 +34,7 @@
 				$this->cache->set($name, file_get_contents($file));
 				require_once ($file);
 			}
-			
+
 			// Output from cache and run as PHP
 			else eval('?>' . $content);
 		}
