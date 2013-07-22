@@ -12,15 +12,25 @@
 		public $app;
 		public $routes = array();
 
+		public $route;
+		public $directory;
+
 		public function __construct($app)
 		{
 			$this->app = $app;
 
-			if (empty($_SERVER['REQUEST_URI']))
-				throw new \Exception("Creating router: Can't access request URI");
+			if (empty($_SERVER['REQUEST_URI']) || empty($_SERVER['DOCUMENT_ROOT']))
+				throw new \Exception("Creating router: Can't access request URI or document root");
+
+			$root = preg_quote($_SERVER['DOCUMENT_ROOT'], '/');
 
 			// Where are we?
+			$this->directory = parse_url(preg_replace("/^{$root}/", '', $this->app->path), PHP_URL_PATH);
 			$this->route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+			// Remove directory from route?
+			if (strpos($this->route, $this->directory) === 0)
+				$this->route = substr($this->route, strlen($this->directory));
 		}
 
 		// Build view + action for this route
