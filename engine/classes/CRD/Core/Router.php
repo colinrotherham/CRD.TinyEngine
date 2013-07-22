@@ -29,7 +29,7 @@
 			$this->route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 			// Remove directory from route?
-			if (strpos($this->route, $this->directory) === 0)
+			if (!empty($this->directory) && strpos($this->route, $this->directory) === 0)
 				$this->route = substr($this->route, strlen($this->directory));
 		}
 
