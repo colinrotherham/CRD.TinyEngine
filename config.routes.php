@@ -7,7 +7,7 @@
 	namespace CRD\Core;
 
 	// Start router
-	$app->router = new Router($app, $path);
+	$app->router = new Router($app);
 
 	// Home
 	$app->router->add('home', '/', array('view' => 'home'), function($view)
