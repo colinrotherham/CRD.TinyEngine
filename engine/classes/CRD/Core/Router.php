@@ -36,7 +36,7 @@
 		// Build view + action for this route
 		public function add($name, $route, $config = null, $action = null)
 		{
-			$name = null;
+			$file = null;
 
 			// Extract view filename from config array
 			if (is_array($config))
@@ -44,11 +44,11 @@
 				if (empty($config['view']))
 					throw new \Exception('Adding route: Missing view filename');
 
-				// Extract view name from array
-				$name = $config['view'];
+				// Extract view filename from array
+				$file = $config['view'];
 			}
 
-			$this->routes[$name] = (object) array('path' => $route, 'view' => new View($this->app, $name, $action));
+			$this->routes[$name] = (object) array('path' => $route, 'view' => new View($this->app, $file, $action));
 		}
 
 		public function view($path = '')
@@ -56,9 +56,9 @@
 			if (empty($path))
 				$path = $this->route;
 
-			// Grab view by name
+			// Grab view by name, empty if 404
 			$name = $this->nameByPath($path);
-			$view = $this->routes[$name]->view;
+			$view = (!empty($name))? $this->routes[$name]->view : null;
 
 			return $view;
 		}
@@ -82,7 +82,7 @@
 			// Scan route table
 			if (!$name) foreach ($this->routes as $route_name => $route)
 			{
-				if ($route->path === $path)
+				if ($route->path === $path || empty($route->path) && $route_name === $path)
 				{
 					// Add to cache
 					$cache->set($cache_name, $route_name);
@@ -94,8 +94,7 @@
 			}
 
 			// Do still have no name?
-			if (!$name)
-				throw new \Exception('Finding route by path: No matching view object found');
+			if (!$name) $name = '';
 
 			return $name;
 		}
