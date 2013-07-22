@@ -10,19 +10,19 @@
 	$app->router = new Router($app, $path);
 
 	// Home
-	$app->router->add('/', array('view-home'), function($view)
+	$app->router->add('/', array('home'), function($view)
 	{
 		$view->template = new Template($view, 'template-page', 'page-home');
 	});
 
 	// Contact Us
-	$app->router->add('/contact/', array('view-contact'), function($view)
+	$app->router->add('/contact/', array('contact'), function($view)
 	{
 		$view->template = new Template($view, 'template-page', 'page-contact');
 	});
 
 	// 404 route
-	$app->router->add(':404:', array('view-error-404'), function($view)
+	$app->router->add(':404:', array('error-404'), function($view)
 	{
 		$view->template = new Template($view, 'template-page', 'page-error');
 	});
