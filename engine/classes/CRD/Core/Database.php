@@ -52,6 +52,9 @@
 			$types = '';
 			$params = array();
 
+			// Reset results
+			$this->result = array();
+
 			// Build query param types/values
 			if (!empty($options))
 			{
