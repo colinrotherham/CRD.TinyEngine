@@ -9,8 +9,6 @@
 
 	class Template
 	{
-		public $app;
-
 		public $page = '';
 		public $title = '';
 		public $path = '';
@@ -27,6 +25,7 @@
 
 		// Other helpers
 		public $router;
+		public $bag;
 		public $html;
 		public $file;
 		public $resources;
@@ -40,8 +39,8 @@
 			// Other helpers
 			$this->router = $app->router;
 
-			// Store template-specific app properties
-			$this->app = (object) array
+			// Store template-specific app properties in shared bag
+			$this->bag = (object) array
 			(
 				'name' => $app->name,
 				'version' => $app->version
