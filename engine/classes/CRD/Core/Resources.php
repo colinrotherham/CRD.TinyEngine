@@ -29,8 +29,11 @@
 			$this->helper = $template->html;
 			$this->file = new File($cache, $template);
 
+			// Grab all resource files
+			$resources = glob($template->path . '/resources/*.php');
+
 			// Loop resource filenames
-			foreach (glob($template->path . '/resources/*.php') as $file)
+			if (!empty($resources)) foreach ($resources as $file)
 			{
 				$info = pathinfo($file);
 				$name = basename($file, '.' . $info['extension']);
