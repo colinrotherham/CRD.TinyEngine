@@ -1,8 +1,7 @@
 AddDefaultCharset UTF-8
 DefaultLanguage en-GB
 RewriteEngine on
-RewriteBase /
 
 # Pass all requests to router
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ /engine/start.php/$1 [L]
+RewriteRule ^(.*)$ engine/start.php/$1 [L]
