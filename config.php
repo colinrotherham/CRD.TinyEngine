@@ -14,7 +14,7 @@
 
 	// App name, also cache prefix
 	$app->name = 'Tiny Engine';
-	
+
 	// Set app version string
 	$app->version = '1.0';
 

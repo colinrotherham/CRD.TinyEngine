@@ -60,12 +60,12 @@
 			$this->file = new File($app->cache, $this);
 			$this->resources = new Resources($this, $app->cache);
 		}
-		
+
 		public function __destruct()
 		{
 			$this->render();
 		}
-		
+
 		public function placeHolder($name, $content = null, $partial = null, $partial_shared = null)
 		{
 			$this->placeholder = $name;
@@ -92,11 +92,11 @@
 					$this->contentPartial($partial, $partial_shared);
 					$this->placeHolderEnd();
 				}
-				
+
 				else throw new \Exception("Missing partial: '{$partial}'");
 			}
 		}
-		
+
 		public function placeHolderEnd()
 		{
 			// Spit the buffer into $content
@@ -109,23 +109,23 @@
 				ob_end_clean();
 			}
 		}
-		
+
 		public function placeHolderPartial($name, $partial, $shared = null)
 		{
 			$this->placeHolder($name, null, $partial, $shared);
 		}
-		
+
 		public function contentPartial($partial, $shared = null)
 		{
 			// Inject file, from cache if possible
 			$context = (!empty($shared))? (object) array('name' => 'shared', 'scope' => $shared) : null;
 			$this->file->inject($this->location($partial, true), 'partial-' . $partial, $context);
 		}
-		
+
 		public function content($name, $return = false)
 		{
 			$content = (!empty($this->buffer[$name]))? $this->buffer[$name]: '';
-			
+
 			if (!$return) echo $content;
 			else return $content;
 		}
@@ -134,7 +134,7 @@
 		{
 			if (empty($name))
 				$name = $this->name;
-		
+
 			return $this->path . (($is_partial)? '/views/partials/' : '/templates/') . $name . '.php';
 		}
 

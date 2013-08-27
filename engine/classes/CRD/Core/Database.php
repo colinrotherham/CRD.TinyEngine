@@ -38,7 +38,7 @@
 
 			return $success;
 		}
-		
+
 		public function escape($string)
 		{
 			return $this->connection->escape_string($string);
@@ -101,20 +101,20 @@
 			{
 				// Extract result columns
 				$meta = $statement->result_metadata();
-	
+
 				// Loop columns, create column placeholders
 				while ($field = $meta->fetch_field())
 					$columns[] = &$row[$field->name];
-	
+
 				// Bind result columns
 				call_user_func_array(array($statement, 'bind_result'), $columns);
-	
+
 				// Grab results
 				while ($statement->fetch())
 				{
 					if (!$this->result)
 						$this->result = array();
-	
+
 					// Don't assign by reference
 					$this->result[] = unserialize(serialize($row));
 				}

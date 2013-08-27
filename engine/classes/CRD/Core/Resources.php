@@ -71,11 +71,11 @@
 			{
 				$this->setLocale($this->locale_default);
 			}
-		
+
 			// Grab the locale's resource and category strings
 			$resource = $this->resource;
 			$strings = (array_key_exists($category, $resource))? $resource[$category] : array();
-			
+
 			// Store the final resource string here
 			$string = '';
 
@@ -97,7 +97,7 @@
 				{
 					$string = $strings[$key];
 				}
-				
+
 				// Oh dear, can't find this one
 				else throw new \Exception("Missing '{$key}' resource");
 			}

@@ -16,7 +16,7 @@
 		'Heading'		=> 'Home',
 		'Intro'			=> 'Hello chaps, welcome to the tiny engine demo'
 	);
-	
+
 	// Shared resources
 	$resources->list['en-GB']['Contact Us'] = array
 	(
@@ -30,7 +30,7 @@
 		'Postcode'			=> 'SK12 1RQ',
 		'Contact Us'		=> 'Contact Us'
 	);
-	
+
 	// Home page resources
 	$resources->list['en-GB']['404'] = array
 	(

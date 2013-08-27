@@ -17,12 +17,12 @@
 
 		<!-- CSS includes -->
 		<link rel="stylesheet" href="<?= $router->directory ?>/assets/css/engine.css?cache=<?= urlencode($bag->version) ?>">
-		
+
 		<!-- Initialise advanced UI -->
 		<script>document.documentElement.className = 'advanced';</script>
 	</head>
 	<body class="<?= $html->entities($template->page) ?>">
-	
+
 		<div id="container">
 <?= $template->content('main') ?>
 <?= $template->content('footer') ?>

@@ -17,7 +17,7 @@
 
 		// Shared array for passing from route action to view
 		public $bag;
-	
+
 		public function __construct($app, $name, $action)
 		{
 			$this->app = $app;
@@ -33,12 +33,12 @@
 			// Make view bag an object
 			$this->bag = (object) array();
 		}
-		
+
 		public function location()
 		{
 			return $this->app->path . '/views/' . $this->name . '.php';
 		}
-		
+
 		public function render()
 		{
 			// Run controller action

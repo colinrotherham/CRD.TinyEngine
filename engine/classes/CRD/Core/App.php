@@ -10,7 +10,7 @@
 	class App
 	{
 		public $path;
-	
+
 		public $version = '';
 		public $name = '';
 
@@ -29,7 +29,7 @@
 		public function __construct($path)
 		{
 			$this->path = $path;
-		
+
 			$this->credentials = (object) array();
 			$this->queries = (object) array();
 
