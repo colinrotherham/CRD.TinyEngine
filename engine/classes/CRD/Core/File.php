@@ -32,7 +32,7 @@
 			{
 				// Cache for next time + inject content
 				$this->cache->set($name, file_get_contents($file));
-				require_once ($file);
+				require ($file);
 			}
 
 			// Output from cache and run as PHP
