@@ -9,13 +9,13 @@
 
 	class Redirect
 	{
-		private $permanent = 301;
-		private $temporary = 302;
+		private static $permanent = 301;
+		private static $temporary = 302;
 
-		public function to($url, $is_permanent = false)
+		public static function to($url, $is_permanent = false)
 		{
 			// Which status code?
-			$status = ($is_permanent)? $this->permanent : $this->temporary;
+			$status = ($is_permanent)? self::$permanent : self::$temporary;
 
 			// Perform redirect
 			header('Location: ' . $url, true, $status);
