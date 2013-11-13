@@ -9,7 +9,7 @@
 
 	class HTML
 	{
-		public function entities($value)
+		public static function entities($value)
 		{
 			return htmlentities($value, ENT_QUOTES, 'UTF-8');
 		}
