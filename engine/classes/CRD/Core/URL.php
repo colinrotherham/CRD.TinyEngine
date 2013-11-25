@@ -34,7 +34,7 @@
 							$pair = explode('=', $pair);
 
 							if (!array_key_exists($pair[0], $override['query']))
-								$override['query'][$pair[0]] = $pair[1];
+								$override['query'][$pair[0]] = !empty($pair[1])? $pair[1] : '';
 						}
 					}
 
