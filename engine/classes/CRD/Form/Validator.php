@@ -29,7 +29,7 @@
 				'invalid'		=> '%1$s is not valid',
 				'invalidDate'	=> '%1$s is not a valid date',
 				'groupCheckbox'	=> 'Please tick at least one %1$s',
-				'groupEmail'	=> '%1$s must match'
+				'groupText'		=> '%1$s must match'
 			);
 
 			if (!empty($_POST))
@@ -104,17 +104,17 @@
 					}
 
 					// Email groups
-					else if ($validation->groupType == 'email')
+					else if ($validation->groupType == 'text')
 					{
 						$group_fields = array();
 						$group_matches = false; // Assume emails don't match
 
-						$email1 = (!empty($_POST[$validation->group[0]]))? $_POST[$validation->group[0]] : '';
-						$email2 = (!empty($_POST[$validation->group[1]]))? $_POST[$validation->group[1]] : '';
+						$input1 = (!empty($_POST[$validation->group[0]]))? $_POST[$validation->group[0]] : '';
+						$input2 = (!empty($_POST[$validation->group[1]]))? $_POST[$validation->group[1]] : '';
 
 						// Emails aren't empty but don't match
-						if (!empty($email1) && !empty($email2) && $email1 !== $email2)
-							$this->errorAdd($field, $this->resources['groupEmail'], $validation->name);
+						if (!empty($input1) && !empty($input2) && $input1 !== $input2)
+							$this->errorAdd($field, $this->resources['groupText'], $validation->name);
 					}
 				}
 
