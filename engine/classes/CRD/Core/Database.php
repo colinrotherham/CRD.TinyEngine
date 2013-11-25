@@ -21,20 +21,31 @@
 
 		public function connect()
 		{
+			$success = false;
+
 			// Bring up a database connection
-			if (empty($this->connection)) $this->connection = new \mysqli
-			(
-				$this->credentials->host,
-				$this->credentials->username,
-				$this->credentials->password,
-				$this->credentials->database
-			);
+			if (empty($this->connection))
+			{
+				// Credentials provided
+				if (!empty($this->credentials->host) && !empty($this->credentials->username) && !empty($this->credentials->password) && !empty($this->credentials->database))
+				{
+					// Attempt connection
+					$this->connection = new \mysqli
+					(
+						$this->credentials->host,
+						$this->credentials->username,
+						$this->credentials->password,
+						$this->credentials->database
+					);
+				}
+			}
 
-			// Any errors?
-			$success = (!$this->connection->connect_error)? true : false;
-
-			// Default character set
-			if ($success) $this->connection->set_charset('utf8');
+			// Connected
+			if (is_object($this->connection) && !$this->connection->connect_error)
+			{
+				$this->connection->set_charset('utf8');
+				$success = true;
+			}
 
 			return $success;
 		}
