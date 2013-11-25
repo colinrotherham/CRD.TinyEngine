@@ -106,28 +106,40 @@
 
 			$properties['class'] = $this->validate($name, (!empty($properties['class']))? $properties['class'] : null);
 
-			// Override value if it exists
-			if ($type === 'text' && isset($fields[$name]))
-				$properties['value'] = (!empty($fields[$name]))? $fields[$name] : null;
-
-			// Textarea doesn't use a value attribute
-			else if ($type === 'textarea')
-				$properties['value'] = null;
-
-			// Radio buttons
-			else if ($type === 'radio' && isset($fields[$name]))
+			// Tweak attribute output
+			if (isset($fields[$name]))
 			{
-				$properties['checked'] = null;
+				// Override value if it exists
+				if ($type === 'text')
+					$properties['value'] = (!empty($fields[$name]))? $fields[$name] : null;
 
-				if ($fields[$name] === $properties['value'])
+				// Checkboxes
+				else if ($type === 'checkbox' && !empty($fields[$name]))
 					$properties['checked'] = 'checked';
+
+				// Radio buttons
+				else if ($type === 'radio')
+				{
+					$properties['checked'] = null;
+
+					if ($fields[$name] === $properties['value'])
+						$properties['checked'] = 'checked';
+				}
 			}
 
-			// Checkboxes
-			else if ($type === 'checkbox' && !empty($fields[$name]))
-				$properties['checked'] = 'checked';
+			// Textarea or password field doesn't allow a value attribute
+			if ($type === 'textarea' || $type === 'password')
+				$properties['value'] = null;
 
-			// Add attributes
+			// Queue name attribute
+			if (empty($properties['name']))
+				$properties['name'] = $name;
+
+			// Queue type attribute
+			if (empty($properties['type']))
+				$properties['type'] = $type;
+
+			// Add all attributes
 			foreach ($properties as $attribute => $value)
 			{
 				if ($value === null)
@@ -143,21 +155,24 @@
 		public function input($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, $properties);
-			return "<input name=\"$name\" type=\"text\"{$attributes} />\n";
+			return "<input{$attributes} />\n";
 		}
 
 		public function password($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, $properties, 'password');
-			return "<input name=\"$name\" type=\"password\"{$attributes} />\n";
+			return "<input{$attributes} />\n";
 		}
 
 		public function textarea($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, $properties, 'textarea');
-			$content = isset($this->fields[$name])? $this->fields[$name] : (!empty($properties['value'])? $properties['value'] : '');
 
-			return "<textarea name=\"$name\"{$attributes}>{$content}</textarea>\n";
+			// Pull out value
+			$value = isset($this->fields[$name])?
+				$this->escape($this->fields[$name]) : (!empty($properties['value'])? $this->escape($properties['value']) : '');
+
+			return "<textarea{$attributes}>{$value}</textarea>\n";
 		}
 
 		public function radio($name, $properties = null)
