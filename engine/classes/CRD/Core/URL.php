@@ -39,7 +39,7 @@
 					}
 
 					// New combined/replaced query string
-					self::$components['query'] = http_build_query($override['query']);
+					self::$components['query'] = http_build_query($override['query'], '', '&', PHP_QUERY_RFC3986);
 				}
 
 				// Override hash fragment
