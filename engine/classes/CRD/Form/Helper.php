@@ -155,13 +155,13 @@
 		public function input($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, $properties);
-			return "<input{$attributes} />\n";
+			return "<input{$attributes}>\n";
 		}
 
 		public function password($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, $properties, 'password');
-			return "<input{$attributes} />\n";
+			return "<input{$attributes}>\n";
 		}
 
 		public function textarea($name, $properties = null)
@@ -178,20 +178,20 @@
 		public function radio($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, $properties, 'radio');
-			return "<input name=\"$name\" type=\"radio\"{$attributes} />\n";
+			return "<input name=\"$name\" type=\"radio\"{$attributes}>\n";
 		}
 
 		public function checkbox($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, $properties, 'checkbox');
-			return "<input name=\"$name\" type=\"checkbox\"{$attributes} />\n";
+			return "<input name=\"$name\" type=\"checkbox\"{$attributes}>\n";
 		}
 
 		public function select($name, $options, $value = null, $properties = null)
 		{
 			$attributes = $this->attributes($name, $properties, 'select');
 
-			$markup = "<select name=\"$name\"{$attributes} />\n";
+			$markup = "<select name=\"$name\"{$attributes}>\n";
 			$markup .= $this->selectOptions($name, $options, $value);
 			$markup .= "</select>";
 
