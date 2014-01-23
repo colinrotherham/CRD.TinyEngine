@@ -31,9 +31,6 @@
 				'groupCheckbox'	=> 'Please tick at least one %1$s',
 				'groupText'		=> '%1$s must match'
 			);
-
-			if (!empty($_POST))
-				$this->validate();
 		}
 
 		public function validate()
@@ -103,7 +100,7 @@
 							$this->errorAdd($field, $this->resources['groupCheckbox'], strtolower($validation->name));
 					}
 
-					// Email groups
+					// Text groups
 					else if ($validation->groupType == 'text')
 					{
 						$group_fields = array();

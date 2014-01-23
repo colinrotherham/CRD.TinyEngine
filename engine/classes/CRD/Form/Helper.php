@@ -9,25 +9,40 @@
 
 	class Helper
 	{
-		public $model = array();
-		public $fields = array();
-		public $errors = array();
+		public $type;
+		public $callback;
+		public $validator;
+		public $helper;
 
-		public function __construct(Validator $validator)
+		public function __construct($type, $model, $callback)
 		{
-			$this->model = $validator->model;
-			$this->fields = $validator->fields;
-			$this->errors = $validator->errors;
+			// Set properties
+			$this->type = $type;
+			$this->callback = $callback;
+
+			// Create validator/helper objects
+			$this->validator = new Validator($model);
+			$this->helper = new HTML($this->validator);
+
+			// Validate?
+			if ($this->isPosted())
+			{
+				$this->validator->validate();
+
+				// Check status and run callback
+				if ($this->isSuccess())
+					$callback($this);
+			}
 		}
 
-		public function email($to, $from, $subject)
+		public function toEmail($to, $from, $subject)
 		{
 			$fields = array();
 			$message = '';
 
-			foreach ($this->fields as $field => $value)
+			foreach ($this->validator->fields as $field => $value)
 			{
-				$field = $this->model->$field;
+				$field = $this->validator->model->$field;
 				$message .= $field->name . ': ' . trim($value) . "\n";
 			}
 
@@ -35,167 +50,32 @@
 			mail($to, $subject, $message, "From: <{$from}>");
 		}
 
-		public function escape($value)
+		public function isPosted()
 		{
-			return htmlentities($value, ENT_QUOTES, 'UTF-8');
+			$isPosted = false;
+
+			// Check for POST and form matches
+			if (!empty($_POST['type']))
+				$isPosted = $_POST['type'] === $this->type;
+
+			// Check for posted type
+			return $isPosted;
 		}
 
-		public function validate($name, $class = null)
+		public function isSuccess()
 		{
-			if (!empty($this->errors->$name))
-			{
-				// Add a trailing space to the default class?
-				if (!empty($class)) $class .= ' ';
+			$isSuccess = false;
 
-				$class .= 'invalid';
-			}
+			// Check form is submitted
+			if ($this->isPosted())
+				$isSuccess = count((array) $this->getErrors()) === 0;
 
-			return $class;
+			// Check for posted type
+			return $isSuccess;
 		}
 
-		public function selectOptions($name, $list, $default = null)
+		public function getErrors()
 		{
-			function process($list, &$default, &$markup)
-			{
-				// Loop options
-				foreach ($list as $value => $label)
-				{
-					// Loop options group
-					if (is_array($label))
-					{
-						// Start group
-						$markup .= "<optgroup label=\"$value\">\n";
-
-						process($label, $default, $markup);
-
-						// End group
-						$markup .= "</optgroup>\n";
-					}
-
-					else
-					{
-						$attributes = '';
-
-						if (!empty($default) && $value === $default)
-						{
-							$attributes .= ' selected="selected"';
-							$default = null;
-						}
-
-						$markup .= "<option value=\"{$value}\"{$attributes}>{$label}</option>\n";
-					}
-				}
-			}
-
-			$markup = '';
-			$default = (!empty($this->fields[$name]))? $this->fields[$name] : $default;
-
-			// Loop options
-			process($list, $default, $markup);
-
-			return $markup;
-		}
-
-		public function attributes($name, $properties, $type = 'text')
-		{
-			$fields = $this->fields;
-			$attributes = '';
-
-			if (empty($properties))
-				$properties = array();
-
-			$properties['class'] = $this->validate($name, (!empty($properties['class']))? $properties['class'] : null);
-
-			// Tweak attribute output
-			if (isset($fields[$name]))
-			{
-				// Override value if it exists
-				if ($type === 'text')
-					$properties['value'] = (!empty($fields[$name]))? $fields[$name] : null;
-
-				// Checkboxes
-				else if ($type === 'checkbox' && !empty($fields[$name]))
-					$properties['checked'] = 'checked';
-
-				// Radio buttons
-				else if ($type === 'radio')
-				{
-					$properties['checked'] = null;
-
-					if ($fields[$name] === $properties['value'])
-						$properties['checked'] = 'checked';
-				}
-			}
-
-			// Textarea or password field doesn't allow a value attribute
-			if ($type === 'textarea' || $type === 'password')
-				$properties['value'] = null;
-
-			// Queue name attribute
-			if (empty($properties['name']))
-				$properties['name'] = $name;
-
-			// Queue type attribute
-			if (empty($properties['type']))
-				$properties['type'] = $type;
-
-			// Add all attributes
-			foreach ($properties as $attribute => $value)
-			{
-				if ($value === null)
-					continue;
-
-				$value = $this->escape($value);
-				$attributes .= " $attribute=\"$value\"";
-			}
-
-			return $attributes;
-		}
-
-		public function input($name, $properties = null)
-		{
-			$attributes = $this->attributes($name, $properties);
-			return "<input{$attributes}>\n";
-		}
-
-		public function password($name, $properties = null)
-		{
-			$attributes = $this->attributes($name, $properties, 'password');
-			return "<input{$attributes}>\n";
-		}
-
-		public function textarea($name, $properties = null)
-		{
-			$attributes = $this->attributes($name, $properties, 'textarea');
-
-			// Pull out value
-			$value = isset($this->fields[$name])?
-				$this->escape($this->fields[$name]) : (!empty($properties['value'])? $this->escape($properties['value']) : '');
-
-			return "<textarea{$attributes}>{$value}</textarea>\n";
-		}
-
-		public function radio($name, $properties = null)
-		{
-			$attributes = $this->attributes($name, $properties, 'radio');
-			return "<input name=\"$name\" type=\"radio\"{$attributes}>\n";
-		}
-
-		public function checkbox($name, $properties = null)
-		{
-			$attributes = $this->attributes($name, $properties, 'checkbox');
-			return "<input name=\"$name\" type=\"checkbox\"{$attributes}>\n";
-		}
-
-		public function select($name, $options, $value = null, $properties = null)
-		{
-			$attributes = $this->attributes($name, $properties, 'select');
-
-			$markup = "<select name=\"$name\"{$attributes}>\n";
-			$markup .= $this->selectOptions($name, $options, $value);
-			$markup .= "</select>";
-
-			return $markup;
+			return $this->validator->errors;
 		}
 	}
-?>
