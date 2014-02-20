@@ -52,6 +52,9 @@
 
 		public function escape($string)
 		{
+			if (!is_object($this->connection))
+				throw new \Exception('Database escape string: Failed, no connection');
+
 			return $this->connection->escape_string($string);
 		}
 
