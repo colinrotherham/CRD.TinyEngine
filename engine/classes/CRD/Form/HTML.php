@@ -79,7 +79,7 @@
 			return $markup;
 		}
 
-		public function attributes($name, $properties, $type = 'text')
+		public function attributes($name, $properties)
 		{
 			$fields = $this->fields;
 			$attributes = '';
@@ -87,18 +87,18 @@
 			if (empty($properties))
 				$properties = array();
 
-			$properties['class'] = $this->validate($name, (!empty($properties['class']))? $properties['class'] : null);
+			$properties['class'] = $this->validate($name, !empty($properties['class'])? $properties['class'] : null);
+			$properties['type'] = !empty($properties['type'])? $properties['type'] : 'text';
 
-			// Override value if it exists
-			if ($type === 'text' && isset($fields[$name]))
-				$properties['value'] = (!empty($fields[$name]))? $fields[$name] : null;
-
-			// Textarea doesn't use a value attribute
-			else if ($type === 'textarea')
+			// Textarea doesn't use a value/type attribute
+			if ($properties['type'] === 'textarea')
+			{
+				$properties['type'] = null;
 				$properties['value'] = null;
+			}
 
 			// Radio buttons
-			else if ($type === 'radio' && isset($fields[$name]))
+			else if ($properties['type'] === 'radio' && isset($fields[$name]))
 			{
 				$properties['checked'] = null;
 
@@ -107,8 +107,12 @@
 			}
 
 			// Checkboxes
-			else if ($type === 'checkbox' && !empty($fields[$name]))
+			else if ($properties['type'] === 'checkbox' && !empty($fields[$name]))
 				$properties['checked'] = 'checked';
+
+			// Default, text-like
+			else if (isset($fields[$name]))
+				$properties['value'] = (!empty($fields[$name]))? $fields[$name] : null;
 
 			// Add attributes
 			foreach ($properties as $attribute => $value)
@@ -125,13 +129,13 @@
 
 		public function input($name, $properties = null)
 		{
-			$attributes = $this->attributes($name, $properties);
-			return "<input name=\"$name\" type=\"text\"{$attributes}>\n";
+			$attributes = $this->attributes($name, array_merge(array('type' => 'text'), $properties));
+			return "<input name=\"$name\"{$attributes}>\n";
 		}
 
-		public function textarea($name, $properties = null)
+		public function textarea($name, $properties = array())
 		{
-			$attributes = $this->attributes($name, $properties, 'textarea');
+			$attributes = $this->attributes($name, array_merge(array('type' => 'textarea'), $properties));
 			$content = isset($this->fields[$name])? $this->fields[$name] : (!empty($properties['value'])? $properties['value'] : '');
 
 			return "<textarea name=\"$name\"{$attributes}>{$content}</textarea>\n";
@@ -139,14 +143,14 @@
 
 		public function radio($name, $properties = null)
 		{
-			$attributes = $this->attributes($name, $properties, 'radio');
-			return "<input name=\"$name\" type=\"radio\"{$attributes}>\n";
+			$attributes = $this->attributes($name, array_merge(array('type' => 'radio'), $properties));
+			return "<input name=\"$name\"{$attributes}>\n";
 		}
 
 		public function checkbox($name, $properties = null)
 		{
-			$attributes = $this->attributes($name, $properties, 'checkbox');
-			return "<input name=\"$name\" type=\"checkbox\"{$attributes}>\n";
+			$attributes = $this->attributes($name, array_merge(array('type' => 'checkbox'), $properties));
+			return "<input name=\"$name\"{$attributes}>\n";
 		}
 
 		public function select($name, $options, $value = null, $properties = null)
