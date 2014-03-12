@@ -9,8 +9,8 @@
 
 	class URL
 	{
-		protected static $url = '';
-		protected static $components = array();
+		public static $url = '';
+		public static $components = array();
 
 		public static function parse($url = '', $override = null)
 		{
