@@ -10,15 +10,19 @@
 	class Helper
 	{
 		public $type;
-		public $callback;
 		public $validator;
 		public $helper;
 
-		public function __construct($type, $model, $callback)
+		// Callbacks
+		public $onSubmit;
+		public $onSuccess;
+
+		public function __construct($type, $model, $onSuccess, $onSubmit)
 		{
 			// Set properties
 			$this->type = $type;
-			$this->callback = $callback;
+			$this->onSuccess = $onSuccess;
+			$this->onSubmit = $onSubmit;
 
 			// Create validator/helper objects
 			$this->validator = new Validator($model);
@@ -27,11 +31,16 @@
 			// Validate?
 			if ($this->isPosted())
 			{
+				// Run submit callback before validation
+				if (is_callable($onSubmit))
+					$onSubmit($this);
+
+				// Validate
 				$this->validator->validate();
 
 				// Check status and run callback
-				if ($this->isSuccess())
-					$callback($this);
+				if ($this->isSuccess() && is_callable($onSuccess))
+					$onSuccess($this);
 			}
 		}
 
