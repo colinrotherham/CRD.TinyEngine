@@ -35,11 +35,15 @@
 			}
 		}
 
-		public function toEmail($to, $from, $subject)
+		public function toEmail($to, $from, $subject, $message = '')
 		{
 			$fields = array();
-			$message = '';
 
+			// Pad if message provided
+			if (!empty($message))
+				$message .= "\n\n";
+
+			// Build message
 			foreach ($this->validator->fields as $field => $value)
 			{
 				$field = $this->validator->model->$field;
