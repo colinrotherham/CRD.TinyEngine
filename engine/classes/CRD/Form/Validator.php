@@ -15,9 +15,9 @@
 
 		public $validated = false;
 
-		public function __construct($model, $resources = null)
+		public function __construct(&$model, $resources = null)
 		{
-			$this->model = $model;
+			$this->model = &$model;
 			$this->errors = (object) array();
 
 			$this->resources = !empty($resources)? $resources : array
