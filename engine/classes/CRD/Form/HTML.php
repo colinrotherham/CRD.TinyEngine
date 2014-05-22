@@ -56,7 +56,7 @@
 				{
 					$attributes = '';
 
-					if (!empty($default) && $value === $default)
+					if (!empty($default) && $value == $default)
 					{
 						$attributes .= ' selected="selected"';
 						$default = null;
@@ -106,7 +106,7 @@
 			{
 				$properties['checked'] = null;
 
-				if ($fields[$name] === $properties['value'])
+				if ($fields[$name] == $properties['value'])
 					$properties['checked'] = 'checked';
 			}
 
