@@ -90,8 +90,12 @@
 			$properties['class'] = $this->validate($name, !empty($properties['class'])? $properties['class'] : null);
 			$properties['type'] = !empty($properties['type'])? $properties['type'] : 'text';
 
+			// Password field, strip value
+			if ($properties['type'] === 'password')
+				$properties['value'] = null;
+
 			// Textarea doesn't use a value/type attribute
-			if ($properties['type'] === 'textarea')
+			else if ($properties['type'] === 'textarea')
 			{
 				$properties['type'] = null;
 				$properties['value'] = null;
