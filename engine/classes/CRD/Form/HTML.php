@@ -88,7 +88,7 @@
 				$properties = array();
 
 			$properties['class'] = $this->validate($name, !empty($properties['class'])? $properties['class'] : null);
-			$properties['type'] = !empty($properties['type'])? $properties['type'] : 'text';
+			$properties['type'] = !empty($properties['type'])? $properties['type'] : null;
 
 			// Password field, strip value
 			if ($properties['type'] === 'password')
