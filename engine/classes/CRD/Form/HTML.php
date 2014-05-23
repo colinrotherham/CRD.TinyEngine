@@ -159,7 +159,7 @@
 
 		public function select($name, $options, $value = null, $properties = null)
 		{
-			$attributes = $this->attributes($name, $properties, 'select');
+			$attributes = $this->attributes($name, $properties);
 
 			$markup = "<select name=\"$name\"{$attributes}>\n";
 			$markup .= $this->selectOptions($name, $options, $value);
