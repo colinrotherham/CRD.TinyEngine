@@ -26,6 +26,9 @@
 		public $database;
 		public $redirect;
 
+		// App forms
+		private $forms = array();
+
 		public function __construct($path)
 		{
 			$this->path = $path;
@@ -40,5 +43,26 @@
 			$this->cache = new Cache($this->name, $this->cache_enabled, $this->cache_length);
 			$this->database = new Database($this->credentials);
 			$this->redirect = new Redirect();
+		}
+
+/*
+		Form helper methods
+		----------------------------------- */
+
+		public function setForm($type, $model, $onSuccess = null, $onSubmit = null, $onPreSubmit = null)
+		{
+			// Add form to collection
+			$form = new \CRD\Form\Helper($type, $model, $onSuccess, $onSubmit, $onPreSubmit);
+			$this->forms[$type] = $form;
+
+			return $form;
+		}
+
+		public function getForm($type)
+		{
+			$form = array_key_exists($type, $this->forms)?
+				$this->forms[$type] : false;
+
+			return $form;
 		}
 	}
