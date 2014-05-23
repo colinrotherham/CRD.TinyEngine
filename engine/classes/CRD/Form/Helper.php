@@ -14,15 +14,17 @@
 		public $helper;
 
 		// Callbacks
-		public $onSubmit;
-		public $onSuccess;
+		public $onPreSubmit; // Before validation
+		public $onSubmit; // After validation (any)
+		public $onSuccess; // After validation (successful only)
 
-		public function __construct($type, $model, $onSuccess, $onSubmit)
+		public function __construct($type, $model, $onSuccess = null, $onSubmit = null, $onPreSubmit = null)
 		{
 			// Set properties
 			$this->type = $type;
 			$this->onSuccess = $onSuccess;
 			$this->onSubmit = $onSubmit;
+			$this->onPreSubmit = $onPreSubmit;
 
 			// Create validator/helper objects
 			$this->validator = new Validator($model);
@@ -31,12 +33,16 @@
 			// Validate?
 			if ($this->isPosted())
 			{
-				// Run submit callback before validation
-				if (is_callable($onSubmit))
-					$onSubmit($this);
+				// Run pre-submit callback before validation
+				if (is_callable($onPreSubmit))
+					$onPreSubmit($this);
 
 				// Validate
 				$this->validator->validate();
+
+				// Run submit callback after validation
+				if (is_callable($onSubmit))
+					$onSubmit($this);
 
 				// Check status and run callback
 				if ($this->isSuccess() && is_callable($onSuccess))
