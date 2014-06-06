@@ -163,7 +163,7 @@
 
 			$markup = "<select name=\"$name\"{$attributes}>\n";
 			$markup .= $this->selectOptions($name, $options, $value);
-			$markup .= "</select>";
+			$markup .= "</select>\n";
 
 			return $markup;
 		}
