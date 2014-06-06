@@ -113,7 +113,11 @@
 
 			// Checkboxes
 			else if ($properties['type'] === 'checkbox' && !empty($fields[$name]))
-				$properties['checked'] = 'checked';
+			{
+				// For arrays of checkboxes, value must be present
+				if (!is_array($fields[$name]) || is_array($fields[$name]) && in_array($properties['value'], $fields[$name]))
+					$properties['checked'] = 'checked';
+			}
 
 			// Default, text-like
 			else if (isset($fields[$name]))
