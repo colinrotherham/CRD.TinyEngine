@@ -89,6 +89,7 @@
 
 			$properties['class'] = $this->validate($name, !empty($properties['class'])? $properties['class'] : null);
 			$properties['type'] = !empty($properties['type'])? $properties['type'] : null;
+			$properties['name'] = !empty($properties['name'])? $properties['name'] : $name;
 
 			// Password field, strip value
 			if ($properties['type'] === 'password')
@@ -134,7 +135,7 @@
 		public function input($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, array_merge(array('type' => 'text'), $properties));
-			return "<input name=\"$name\"{$attributes}>\n";
+			return "<input{$attributes}>\n";
 		}
 
 		public function textarea($name, $properties = array())
@@ -142,26 +143,26 @@
 			$attributes = $this->attributes($name, array_merge(array('type' => 'textarea'), $properties));
 			$content = isset($this->fields[$name])? $this->fields[$name] : (!empty($properties['value'])? $properties['value'] : '');
 
-			return "<textarea name=\"$name\"{$attributes}>{$content}</textarea>\n";
+			return "<textarea{$attributes}>{$content}</textarea>\n";
 		}
 
 		public function radio($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, array_merge(array('type' => 'radio'), $properties));
-			return "<input name=\"$name\"{$attributes}>\n";
+			return "<input{$attributes}>\n";
 		}
 
 		public function checkbox($name, $properties = null)
 		{
 			$attributes = $this->attributes($name, array_merge(array('type' => 'checkbox'), $properties));
-			return "<input name=\"$name\"{$attributes}>\n";
+			return "<input{$attributes}>\n";
 		}
 
 		public function select($name, $options, $value = null, $properties = null)
 		{
 			$attributes = $this->attributes($name, $properties);
 
-			$markup = "<select name=\"$name\"{$attributes}>\n";
+			$markup = "<select{$attributes}>\n";
 			$markup .= $this->selectOptions($name, $options, $value);
 			$markup .= "</select>\n";
 
