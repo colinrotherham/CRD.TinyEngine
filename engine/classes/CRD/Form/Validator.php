@@ -122,7 +122,11 @@
 					{
 						// Add validation message
 						if ($is_empty)
-							$this->errorAdd($field, $this->resources['required'], $validation->name);
+						{
+							// Watch out for valid file uploads
+							if ($validation->type !== 'file' || !array_key_exists($field, $_FILES))
+								$this->errorAdd($field, $this->resources['required'], $validation->name);
+						}
 
 						// Check regex
 						else if (!empty($validation->regEx) && is_string($validation->regEx))
