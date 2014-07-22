@@ -81,15 +81,17 @@
 
 			// Prepare query
 			$statement = $this->connection->prepare($query);
+
+			// Preparing statement failed
+			if (!$statement)
+				throw new \Exception("Database prepared statement: Failed ({$this->connection->errno}) {$this->connection->error}");
+
+			// Proceed with param binding
 			return $this->prepare($statement, $types, $params);
 		}
 
 		private function prepare($statement, $types, $params)
 		{
-			// Prepare statement
-			if (!$statement)
-				throw new \Exception('Database prepared statement: Failed');
-
 			// Bind params and run query
 			if (!empty($params))
 			{
