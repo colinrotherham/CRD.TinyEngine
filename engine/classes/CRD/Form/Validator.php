@@ -42,9 +42,12 @@
 			{
 				$is_empty = false;
 
-				// Missing value becomes empty string
+				// Value, type
 				$value = (!empty($_POST[$field]))? (get_magic_quotes_gpc()? stripcslashes($_POST[$field]) : $_POST[$field]) : '';
-				$is_empty = ($value === '')? true : false;
+				$type = !empty($validation->type)? $validation->type : null;
+
+				// Blank value or empty array?
+				$is_empty = ((is_string($value) && $value === '') || (is_array($value) && empty($value)))? true : false;
 
 				// Is this a field group, not a field?
 				if (!empty($validation->group) && !empty($validation->groupType))
@@ -124,7 +127,7 @@
 						if ($is_empty)
 						{
 							// Watch out for valid file uploads
-							if ($validation->type !== 'file' || !array_key_exists($field, $_FILES))
+							if ($type !== 'file' || (!array_key_exists($field, $_FILES) || empty($_FILES[$field]['size'])))
 								$this->errorAdd($field, $this->resources['required'], $validation->name);
 						}
 

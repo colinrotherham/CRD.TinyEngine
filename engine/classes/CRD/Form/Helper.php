@@ -62,7 +62,13 @@
 			foreach ($this->validator->fields as $field => $value)
 			{
 				$field = $this->validator->model->$field;
-				$message .= $field->name . ': ' . trim($value) . "\n";
+
+				// Array of values
+				if (is_array($value)) foreach ($value as $part)
+					$message .= $field->name . ': ' . trim($part) . "\n";
+
+				// Single field
+				else $message .= $field->name . ': ' . trim($value) . "\n";
 			}
 
 			// Send email
