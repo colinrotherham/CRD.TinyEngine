@@ -29,10 +29,17 @@
 			// Create validator/helper objects
 			$this->validator = new Validator($model);
 			$this->helper = new HTML($this->validator);
+		}
 
+		public function validate()
+		{
 			// Validate?
 			if ($this->isPosted())
 			{
+				$onSuccess = $this->onSuccess;
+				$onSubmit = $this->onSubmit;
+				$onPreSubmit = $this->onPreSubmit;
+
 				// Run pre-submit callback before validation
 				if (is_callable($onPreSubmit))
 					$onPreSubmit($this);

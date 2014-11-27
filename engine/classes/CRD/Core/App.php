@@ -63,6 +63,10 @@
 			$form = array_key_exists($type, $this->forms)?
 				$this->forms[$type] : false;
 
+			// Validate
+			if (!empty($form))
+				$form->validate();
+
 			return $form;
 		}
 	}
