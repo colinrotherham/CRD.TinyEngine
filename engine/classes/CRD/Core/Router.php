@@ -37,6 +37,7 @@
 		public function add($name, $route, $config = null, $action = null)
 		{
 			$file = null;
+			$regex = null;
 
 			// Extract view filename from config array
 			if (is_array($config))
@@ -44,11 +45,12 @@
 				if (empty($config['view']))
 					throw new \Exception('Adding route: Missing view filename');
 
-				// Extract view filename from array
+				// Extract view filename and optional regex from array
 				$file = $config['view'];
+				$regex = !empty($config['regex'])? $config['regex'] : null;
 			}
 
-			$this->routes[$name] = (object) array('path' => $route, 'view' => new View($this->app, $file, $action));
+			$this->routes[$name] = (object) array('path' => $route, 'view' => new View($this->app, $file, $action), 'regex' => $regex);
 		}
 
 		public function view($path = '')
@@ -82,7 +84,14 @@
 			// Scan route table
 			if (!$name) foreach ($this->routes as $route_name => $route)
 			{
-				if ($route->path === $path || empty($route->path) && $route_name === $path)
+				$matches = null;
+
+				// Try regex match
+				if (!empty($route->regex))
+					preg_match($route->regex, $path, $matches);
+
+				// Regex or rxact match
+				if ((!empty($matches) && $path === $matches[0]) || $route->path === $path || empty($route->path) && $route_name === $path)
 				{
 					// Add to cache
 					$cache->set($cache_name, $route_name);
