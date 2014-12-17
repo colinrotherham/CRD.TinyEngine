@@ -43,7 +43,7 @@
 				$is_empty = false;
 
 				// Value, type
-				$value = (!empty($_POST[$field]))? (get_magic_quotes_gpc()? stripcslashes($_POST[$field]) : $_POST[$field]) : '';
+				$value = (!empty($_REQUEST[$field]))? (get_magic_quotes_gpc()? stripcslashes($_REQUEST[$field]) : $_REQUEST[$field]) : '';
 				$type = !empty($validation->type)? $validation->type : null;
 
 				// Blank value or empty array?
@@ -55,9 +55,9 @@
 					// Date groups
 					if ($validation->groupType == 'date')
 					{
-						$date_day = $_POST[$validation->group[0]];
-						$date_month = $_POST[$validation->group[1]];
-						$date_year = $_POST[$validation->group[2]];
+						$date_day = $_REQUEST[$validation->group[0]];
+						$date_month = $_REQUEST[$validation->group[1]];
+						$date_year = $_REQUEST[$validation->group[2]];
 
 						// All date fields must be populated
 						$is_empty = (!empty($date_day) && !empty($date_month) && !empty($date_year))? false : true;
@@ -91,11 +91,11 @@
 						foreach ($validation->group as $group_field)
 						{
 							// Is this checkbox empty?
-							if (empty($_POST[$group_field]))
+							if (empty($_REQUEST[$group_field]))
 								continue;
 
 							$group_empty = false;
-							$group_fields[$group_field] = $_POST[$group_field];
+							$group_fields[$group_field] = $_REQUEST[$group_field];
 						}
 
 						// Are all checkboxes unticked?
@@ -109,8 +109,8 @@
 						$group_fields = array();
 						$group_matches = false; // Assume emails don't match
 
-						$input1 = (!empty($_POST[$validation->group[0]]))? $_POST[$validation->group[0]] : '';
-						$input2 = (!empty($_POST[$validation->group[1]]))? $_POST[$validation->group[1]] : '';
+						$input1 = (!empty($_REQUEST[$validation->group[0]]))? $_REQUEST[$validation->group[0]] : '';
+						$input2 = (!empty($_REQUEST[$validation->group[1]]))? $_REQUEST[$validation->group[1]] : '';
 
 						// Emails aren't empty but don't match
 						if (!empty($input1) && !empty($input2) && $input1 !== $input2)

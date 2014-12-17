@@ -86,9 +86,9 @@
 		{
 			$isPosted = false;
 
-			// Check for POST and form matches
-			if (!empty($_POST['type']))
-				$isPosted = $_POST['type'] === $this->type;
+			// Check for request and form type matches
+			if (!empty($_REQUEST['type']))
+				$isPosted = $_REQUEST['type'] === $this->type;
 
 			// Check for posted type
 			return $isPosted;
