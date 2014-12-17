@@ -56,7 +56,7 @@
 				{
 					$attributes = '';
 
-					if (!empty($default) && $value == $default)
+					if (!empty($default) && $this->entities_decode($value) == $default)
 					{
 						$attributes .= ' selected="selected"';
 						$default = null;
