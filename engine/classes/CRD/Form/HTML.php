@@ -95,8 +95,8 @@
 			if ($properties['type'] === 'password')
 				$properties['value'] = null;
 
-			// Textarea doesn't use a value/type attribute
-			else if ($properties['type'] === 'textarea')
+			// Textarea and select menu don't use a value/type attribute
+			else if ($properties['type'] === 'textarea' || $properties['type'] === 'select')
 			{
 				$properties['type'] = null;
 				$properties['value'] = null;
@@ -164,7 +164,7 @@
 
 		public function select($name, $options, $value = null, $properties = null)
 		{
-			$attributes = $this->attributes($name, $properties);
+			$attributes = $this->attributes($name, array_merge(array('type' => 'select'), $properties));
 
 			$markup = "<select{$attributes}>\n";
 			$markup .= $this->selectOptions($name, $options, $value);
