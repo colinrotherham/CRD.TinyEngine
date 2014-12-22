@@ -79,7 +79,7 @@
 			}
 
 			// Send email
-			mail($to, $subject, $message, "From: <{$from}>");
+			mail($to, $subject, $message, "From: <{$from}>", "-f {$from}");
 		}
 
 		public function isPosted()
