@@ -100,7 +100,7 @@
 		// Wrapper for compatibility
 		public function isPosted()
 		{
-			return isSubmitted();
+			return $this->isSubmitted();
 		}
 
 		// Has form been submitted with no errors?
