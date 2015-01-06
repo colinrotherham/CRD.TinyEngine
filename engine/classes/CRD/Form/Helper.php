@@ -18,6 +18,10 @@
 		public $onSubmit; // After validation (any)
 		public $onSuccess; // After validation (successful only)
 
+		// Status
+		public $hasSubmit = false;
+		public $hasSuccess = false;
+
 		public function __construct($type, $model, $onSuccess = null, $onSubmit = null, $onPreSubmit = null)
 		{
 			// Set properties
@@ -33,8 +37,8 @@
 
 		public function validate()
 		{
-			// Validate?
-			if ($this->isPosted())
+			// Validate? Runs once per submission
+			if (!$this->hasSubmit && $this->isSubmitted())
 			{
 				$onSuccess = $this->onSuccess;
 				$onSubmit = $this->onSubmit;
@@ -82,28 +86,32 @@
 			mail($to, $subject, $message, "From: <{$from}>", "-f {$from}");
 		}
 
-		public function isPosted()
+		// Has form been submitted?
+		public function isSubmitted()
 		{
-			$isPosted = false;
-
 			// Check for request and form type matches
 			if (!empty($_REQUEST['type']))
-				$isPosted = $_REQUEST['type'] === $this->type;
+				$this->hasSubmit = $_REQUEST['type'] === $this->type;
 
 			// Check for posted type
-			return $isPosted;
+			return $this->hasSubmit;
 		}
 
+		// Wrapper for compatibility
+		public function isPosted()
+		{
+			return isSubmitted();
+		}
+
+		// Has form been submitted with no errors?
 		public function isSuccess()
 		{
-			$isSuccess = false;
-
 			// Check form is submitted
-			if ($this->isPosted())
-				$isSuccess = count((array) $this->getErrors()) === 0;
+			if ($this->isSubmitted())
+				$this->hasSuccess = count((array) $this->getErrors()) === 0;
 
 			// Check for posted type
-			return $isSuccess;
+			return $this->hasSuccess;
 		}
 
 		public function getErrors()
