@@ -28,6 +28,7 @@
 				'maxLength'		=> '%1$s must be %2$s or fewer characters',
 				'invalid'		=> '%1$s is not valid',
 				'invalidDate'	=> '%1$s is not a valid date',
+				'groupRequired'	=> 'Please fill in at least one %1$s',
 				'groupCheckbox'	=> 'Please tick at least one %1$s',
 				'groupText'		=> '%1$s must match'
 			);
@@ -53,7 +54,7 @@
 				if (!empty($validation->group) && !empty($validation->groupType))
 				{
 					// Date groups
-					if ($validation->groupType == 'date')
+					if ($validation->groupType === 'date')
 					{
 						$date_day = $_REQUEST[$validation->group[0]];
 						$date_month = $_REQUEST[$validation->group[1]];
@@ -83,36 +84,42 @@
 					}
 
 					// Checkbox groups
-					else if ($validation->groupType == 'checkbox')
+					else if ($validation->groupType === 'checkbox' || $validation->groupType === 'required')
 					{
 						$group_fields = array();
-						$group_empty = true; // Assume all checkboxes are still unticked
+						$group_empty = true; // Assume all fields are empty/unticked
 
 						foreach ($validation->group as $group_field)
 						{
-							// Is this checkbox empty?
 							if (empty($_REQUEST[$group_field]))
+							// Is this field empty/unticked?
 								continue;
 
 							$group_empty = false;
 							$group_fields[$group_field] = $_REQUEST[$group_field];
 						}
 
-						// Are all checkboxes unticked?
+						// Are all fields empty/unticked?
 						if ($group_empty)
-							$this->errorAdd($field, $this->resources['groupCheckbox'], strtolower($validation->name));
+						{
+							$message = $validation->groupType === 'checkbox'?
+								$this->resources['groupCheckbox'] : $this->resources['groupRequired'];
+
+							// Append error
+							$this->errorAdd($field, $message, strtolower($validation->name));
+						}
 					}
 
-					// Text groups
-					else if ($validation->groupType == 'text')
+					// Group field text values must match
+					else
 					{
 						$group_fields = array();
-						$group_matches = false; // Assume emails don't match
+						$group_matches = false; // Assume fields don't match
 
 						$input1 = (!empty($_REQUEST[$validation->group[0]]))? $_REQUEST[$validation->group[0]] : '';
 						$input2 = (!empty($_REQUEST[$validation->group[1]]))? $_REQUEST[$validation->group[1]] : '';
 
-						// Emails aren't empty but don't match
+						// Fields aren't empty but don't match
 						if (!empty($input1) && !empty($input2) && $input1 !== $input2)
 							$this->errorAdd($field, $this->resources['groupText'], $validation->name);
 					}
