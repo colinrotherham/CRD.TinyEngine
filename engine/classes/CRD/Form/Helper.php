@@ -61,7 +61,7 @@
 			}
 		}
 
-		public function toEmail($to, $from, $subject, $message = '')
+		public function toEmail($to, $from, $subject, $message = '', $name = '')
 		{
 			$fields = array();
 
@@ -82,8 +82,11 @@
 				else $message .= $field->name . ': ' . trim($value) . "\n";
 			}
 
+			// Build "From" header (Optional friendly name)
+			$header = !empty($name)? "From: {$name} <{$from}>" : "From: {$from}";
+
 			// Send email
-			mail($to, $subject, $message, "From: <{$from}>", "-f {$from}");
+			mail($to, $subject, $message, $header);
 		}
 
 		// Has form been submitted?
