@@ -86,7 +86,7 @@
 			$header = !empty($name)? "From: {$name} <{$from}>" : "From: {$from}";
 
 			// Send email
-			mail($to, $subject, $message, $header);
+			mail($to, $subject, $message, $header, "-f {$from}");
 		}
 
 		// Has form been submitted?
