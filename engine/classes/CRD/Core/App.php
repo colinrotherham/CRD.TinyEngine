@@ -45,6 +45,16 @@
 			$this->redirect = new Redirect();
 		}
 
+		public function isSSL()
+		{
+			// Detect SSL or SSL offloaded
+			$isSSL = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+			$isSSLForwarded = !empty($_SERVER['X-Forwarded-Proto']) && $_SERVER['X-Forwarded-Proto'] === 'https';
+
+			// Are we secure?
+			return $isSSL || $isSSLForwarded;
+		}
+
 /*
 		Form helper methods
 		----------------------------------- */
