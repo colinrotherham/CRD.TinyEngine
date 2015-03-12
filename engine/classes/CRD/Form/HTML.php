@@ -20,14 +20,14 @@
 			$this->errors = &$validator->errors;
 		}
 
-		public function validate($name, $class = null)
+		public function validate($name, $class = null, $classInvalid = 'invalid')
 		{
 			if (!empty($this->errors->$name))
 			{
 				// Add a trailing space to the default class?
 				if (!empty($class)) $class .= ' ';
 
-				$class .= 'invalid';
+				$class .= $classInvalid;
 			}
 
 			return $class;
