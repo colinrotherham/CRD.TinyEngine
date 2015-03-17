@@ -49,7 +49,7 @@
 		{
 			// Detect SSL or SSL offloaded
 			$isSSL = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
-			$isSSLForwarded = !empty($_SERVER['X-Forwarded-Proto']) && $_SERVER['X-Forwarded-Proto'] === 'https';
+			$isSSLForwarded = !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
 
 			// Are we secure?
 			return $isSSL || $isSSLForwarded;
