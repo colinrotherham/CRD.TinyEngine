@@ -121,4 +121,9 @@
 		{
 			return $this->validator->errors;
 		}
+
+		public function hasErrors()
+		{
+			return count((array) $this->getErrors()) > 0;
+		}
 	}
