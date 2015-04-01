@@ -45,6 +45,10 @@
 				// Override hash fragment
 				if (!empty($override['fragment']))
 					self::$components['fragment'] = $override['fragment'];
+
+				// Override scheme
+				if (!empty($override['scheme']))
+					self::$components['scheme'] = $override['scheme'];
 			}
 
 			return self::build();
