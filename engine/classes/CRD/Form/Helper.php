@@ -82,11 +82,14 @@
 				else $message .= $field->name . ': ' . trim($value) . "\n";
 			}
 
-			// Build "From" header (Optional friendly name)
-			$header = !empty($name)? "From: {$name} <{$from}>" : "From: {$from}";
+			// Additional headers
+			$headers = array();
+			$headers[] = 'MIME-Version: 1.0';
+			$headers[] = 'Content-Type: text/plain; charset="UTF-8"';
+			$headers[] = !empty($name)? "From: {$name} <{$from}>" : "From: {$from}";
 
 			// Send email
-			mail($to, $subject, $message, $header, "-f {$from}");
+			mail($to, $subject, $message, implode("\r\n", $headers), "-f {$from}");
 		}
 
 		// Has form been submitted?
