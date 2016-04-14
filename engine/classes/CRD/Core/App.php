@@ -40,7 +40,7 @@
 		// Instantiate other helpers + inject app instance
 		public function start()
 		{
-			$this->cache = new Cache($this->name, $this->cache_enabled, $this->cache_length);
+			$this->cache = new Cache("{$this->name}-{$this->version}", $this->cache_enabled, $this->cache_length);
 			$this->database = new Database($this->credentials);
 			$this->redirect = new Redirect();
 		}
