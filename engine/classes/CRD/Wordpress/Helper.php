@@ -48,7 +48,14 @@
 						$template = get_post_type($pageId);
 
 					// Use template name
-					else $template = get_page_template_slug($pageId);
+					else {
+
+						// Unless 404
+						if (is_404())
+							$template = '404';
+
+						else $template = get_page_template_slug($pageId);
+					}
 				}
 
 				// Template name, default to index
@@ -75,34 +82,49 @@
 			// Default to no override
 			$override = false;
 
-			// Check for overrides if category/name provided
-			if (!empty($overrides) && (!empty($params['category_name']) || !empty($params['post_type'])))
+			// Check for overrides
+			if (!empty($overrides))
 			{
-				$category = null;
-
-				// Is this category a post type?
-				if (!empty($params['post_type']))
+				// Check for regex match on route
+				foreach ($overrides as $category => $routes)
 				{
-					$typeData = get_post_type_object($params['post_type']);
-
-					// Use post type as-is or use its rewrite?
-					$category = !empty($typeData) && !empty($typeData->rewrite['slug'])?
-						$typeData->rewrite['slug'] : $params['post_type'];
+					foreach ($routes as $name => $route)
+					{
+						// Pick match
+						if (!empty($route->regex) && !!preg_match($route->regex, $_SERVER['REQUEST_URI']))
+							$override = $overrides[$category][$name];
+					}
 				}
 
-				// Use category name
-				else $category = $params['category_name'];
-
-				// Matching category
-				if (array_key_exists($category, $overrides))
+				// Check if category/name provided
+				if (empty($override) && !empty($params['category_name']) || !empty($params['post_type']))
 				{
-					// Use asterisk when no name provided
-					$name = !empty($params['name'])?
-						$params['name'] : '*';
+					$category = null;
 
-					// In the override list?
-					if (array_key_exists($name, $overrides[$category]))
-						$override = $overrides[$category][$name];
+					// Is this category a post type?
+					if (!empty($params['post_type']))
+					{
+						$typeData = get_post_type_object($params['post_type']);
+
+						// Use post type as-is or use its rewrite?
+						$category = !empty($typeData) && !empty($typeData->rewrite['slug'])?
+							$typeData->rewrite['slug'] : $params['post_type'];
+					}
+
+					// Use category name
+					else $category = $params['category_name'];
+
+					// Matching category
+					if (array_key_exists($category, $overrides))
+					{
+						// Use asterisk when no name provided
+						$name = !empty($params['name'])?
+							$params['name'] : '*';
+
+						// In the override list?
+						if (array_key_exists($name, $overrides[$category]))
+							$override = $overrides[$category][$name];
+					}
 				}
 			}
 
