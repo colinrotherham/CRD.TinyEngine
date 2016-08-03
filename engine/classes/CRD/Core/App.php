@@ -65,6 +65,10 @@
 			$form = new \CRD\Form\Helper($type, $model, $onSuccess, $onSubmit, $onPreSubmit);
 			$this->forms[$type] = $form;
 
+			// Validate
+			if (!empty($form))
+				$form->validate();
+
 			return $form;
 		}
 
@@ -72,10 +76,6 @@
 		{
 			$form = array_key_exists($type, $this->forms)?
 				$this->forms[$type] : false;
-
-			// Validate
-			if (!empty($form))
-				$form->validate();
 
 			return $form;
 		}
